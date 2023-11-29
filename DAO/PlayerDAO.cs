@@ -65,7 +65,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
             {
                 using(SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    SqlCommand cmd = new SqlCommand($"SELECT * FROM dbo.Player WHERE Id = @Id", connection);
+                    SqlCommand cmd = new SqlCommand($"SELECT * FROM dbo.Player WHERE Id_Player = @Id", connection);
                     cmd.Parameters.AddWithValue("Id", id);
                     connection.Open();
                     SqlDataReader reader = cmd.ExecuteReader();
@@ -124,7 +124,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    SqlCommand cmd = new SqlCommand($"UPDATE dbo.Player SET FirstName = @FirstName, LastName = @LastName, Rank = @Rank, Gender = @Gender, Nationality = @Nationality WHERE Id = @Id", connection);
+                    SqlCommand cmd = new SqlCommand($"UPDATE dbo.Player SET FirstName = @FirstName, LastName = @LastName, Rank = @Rank, Gender = @Gender, Nationality = @Nationality WHERE Id_Player = @Id", connection);
                     cmd.Parameters.AddWithValue("Id", obj.getId()); // Assuming there is an Id property in your Player class
                     cmd.Parameters.AddWithValue("FirstName", obj.getFirstname());
                     cmd.Parameters.AddWithValue("LastName", obj.getLastname());
