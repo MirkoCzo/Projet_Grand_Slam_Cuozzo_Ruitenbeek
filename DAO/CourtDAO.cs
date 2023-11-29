@@ -18,7 +18,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                 {
                     SqlCommand cmd = new SqlCommand($"INSERT INTO dbo.Court (NbSpec, Covered) VALUES (@NbSpec, @Covered)", connection);
                     cmd.Parameters.AddWithValue("NbSpec",obj.getNbSpectators());
-                    cmd.Parameters.AddWithValue("Covered", obj.getCovered());
+                    cmd.Parameters.AddWithValue("Covered", obj.getCovered() ? 1 : 0);
                     connection.Open();
                     int res = cmd.ExecuteNonQuery();
                     succes = res > 0;
