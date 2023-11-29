@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
 {
-    internal class SetDao : DAO<Set>
+    internal class SetDAO : DAO<Set>
     {
         public override bool Create(Set obj)
         {
