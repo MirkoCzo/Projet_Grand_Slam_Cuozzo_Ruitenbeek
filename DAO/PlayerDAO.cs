@@ -44,9 +44,8 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    SqlCommand cmd = new SqlCommand($"DELETE FROM dbo.Player WHERE FirstName = @FirstName AND LastName = @LastName", connection);
-                    cmd.Parameters.AddWithValue("FirstName", obj.getFirstname());
-                    cmd.Parameters.AddWithValue("LastName", obj.getLastname());
+                    SqlCommand cmd = new SqlCommand($"DELETE FROM dbo.Player WHERE Id_Player = @Id", connection);
+                    cmd.Parameters.AddWithValue("Id", obj.getId());
                     connection.Open();
                     int res = cmd.ExecuteNonQuery();
                     succes = res > 0;
