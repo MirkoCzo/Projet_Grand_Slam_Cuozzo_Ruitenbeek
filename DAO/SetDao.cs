@@ -20,10 +20,10 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                     using(SqlCommand command = connection.CreateCommand())
                     {
                         command.CommandText = "INSERT INTO Set (Score_Op_One,Score_Op_Two , Set_Number, Id_Match) VALUES (@scoreOp1, @scoreOp2, @setNumber, @id_match)";
-                        command.Parameters.AddWithValue("@scoreOp1", obj.getScoreOp1());
-                        command.Parameters.AddWithValue("@scoreOp2", obj.getScoreOp2());
-                        command.Parameters.AddWithValue("@setNumber", obj.getSetNumber());
-                        command.Parameters.AddWithValue("@id_match", obj.getId_match());
+                        command.Parameters.AddWithValue("scoreOp1", obj.getScoreOp1());
+                        command.Parameters.AddWithValue("scoreOp2", obj.getScoreOp2());
+                        command.Parameters.AddWithValue("setNumber", obj.getSetNumber());
+                        command.Parameters.AddWithValue("id_match", obj.getId_match());
                         command.ExecuteNonQuery();
                         success = true;
                     }
@@ -47,7 +47,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                     using(SqlCommand command = connection.CreateCommand())
                     {
                         command.CommandText = "DELETE FROM Set WHERE Id_Set = @id";
-                        command.Parameters.AddWithValue("@id", obj.getId());
+                        command.Parameters.AddWithValue("id", obj.getId());
                         command.ExecuteNonQuery();
                         success = true;
                     }
@@ -71,7 +71,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                     using(SqlCommand command = connection.CreateCommand())
                     {
                         command.CommandText = "SELECT * FROM Set WHERE Id_Set = @id";
-                        command.Parameters.AddWithValue("@id", id);
+                        command.Parameters.AddWithValue("id", id);
                         SqlDataReader reader = command.ExecuteReader();
                         if(reader.Read())
                         {
@@ -135,11 +135,11 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                     using(SqlCommand command = connection.CreateCommand())
                     {
                         command.CommandText = "UPDATE Set SET Score_Op_One = @scoreOp1, Score_Op_Two = @scoreOp2, Set_Number = @setNumber, Id_Match = @id_match WHERE Id_Set = @id";
-                        command.Parameters.AddWithValue("@scoreOp1", obj.getScoreOp1());
-                        command.Parameters.AddWithValue("@scoreOp2", obj.getScoreOp2());
-                        command.Parameters.AddWithValue("@setNumber", obj.getSetNumber());
-                        command.Parameters.AddWithValue("@id_match", obj.getId_match());
-                        command.Parameters.AddWithValue("@id", obj.getId());
+                        command.Parameters.AddWithValue("scoreOp1", obj.getScoreOp1());
+                        command.Parameters.AddWithValue("scoreOp2", obj.getScoreOp2());
+                        command.Parameters.AddWithValue("setNumber", obj.getSetNumber());
+                        command.Parameters.AddWithValue("id_match", obj.getId_match());
+                        command.Parameters.AddWithValue("id", obj.getId());
                         command.ExecuteNonQuery();
                         success = true;
                     }
