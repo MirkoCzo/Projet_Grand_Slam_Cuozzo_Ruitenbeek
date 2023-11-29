@@ -42,9 +42,8 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
             {
                 using(SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    SqlCommand cmd = new SqlCommand($"DELETE FROM dbo.Referee WHERE FirstName = @FirstName AND LastName = @LastName", connection);
-                    cmd.Parameters.AddWithValue("FirstName",obj.getFirstname());
-                    cmd.Parameters.AddWithValue("LastName", obj.getLastname);
+                    SqlCommand cmd = new SqlCommand($"DELETE FROM dbo.Referee WHERE Id_Referee = @Id", connection);
+                    cmd.Parameters.AddWithValue("Id_Referee", obj.getId);
                     connection.Open();
                     int res = cmd.ExecuteNonQuery();
                     success = res > 0;
@@ -53,15 +52,57 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
             {
                 Console.WriteLine(ex.Message);
             }
+            return success;
         }
 
         public override Referee Find(int id)
         {
-            throw new NotImplementedException();
+            Referee referee = null;
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand($"SELECT * FROM dbo.Referee WHERE Id = @Id", connection);
+                    cmd.Parameters.AddWithValue("Id", id);
+                    connection.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        referee.setId(reader.GetInt32(0));
+                        referee.setFirstname(reader.GetString(1));
+                        referee.setLastname(reader.GetString(2));
+                        referee.setNationality(reader.GetString(5));
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return referee;
         }
         public override bool Update(Referee obj)
         {
-            throw new NotImplementedException();
+            bool success = false;
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand($"UPDATE dbo.Referee SET FirstName = @FirstName, LastName = @LastName, Nationality = @Nationality WHERE Id = @Id", connection);
+                    cmd.Parameters.AddWithValue("Id", obj.getId()); 
+                    cmd.Parameters.AddWithValue("FirstName", obj.getFirstname());
+                    cmd.Parameters.AddWithValue("LastName", obj.getLastname());
+                    cmd.Parameters.AddWithValue("Nationality", obj.getNationality());
+                    connection.Open();
+                    int res = cmd.ExecuteNonQuery();
+                    success = res > 0;
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return success;
         }
         public override List<Referee> FindAll()
         {
