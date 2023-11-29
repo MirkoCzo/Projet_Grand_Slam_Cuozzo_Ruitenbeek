@@ -8,10 +8,19 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
 {
     internal class Person
     {
+        private int id;
         private string firstname;
         private string lastname;
         private string nationality;
 
+        public int getId()
+        {
+            return id;
+        }
+        public void setId(int id)
+        {
+            this.id = id;
+        }
         public string getFirstname()
         {
             return firstname;

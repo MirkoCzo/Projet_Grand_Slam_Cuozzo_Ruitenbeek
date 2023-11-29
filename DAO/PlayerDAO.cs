@@ -60,8 +60,31 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
         }
 
         public override Player Find(int id)
-        {
-            throw new NotImplementedException();
+        { 
+            Player player = null;
+            try
+            {
+                using(SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand($"SELECT * FROM dbo.Player WHERE Id = @Id", connection);
+                    cmd.Parameters.AddWithValue("Id", id);
+                    connection.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        player.setId(reader.GetInt32(0));
+                        player.setFirstname(reader.GetString(1));
+                        player.setLastname(reader.GetString(2));
+                        player.setRank(reader.GetInt32(3));
+                        player.setGender(reader.GetString(4));
+                        player.setNationality(reader.GetString(5));                       
+                    }
+                }
+            }catch(SqlException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return player;
         }
 
         public override List<Player> FindAll()
@@ -77,6 +100,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                     while (reader.Read())
                     {
                         Player player = new Player();
+                        player.setId(reader.GetInt32(0));
                         player.setFirstname(reader.GetString(1));
                         player.setLastname(reader.GetString(2));
                         player.setRank(reader.GetInt32(3));
@@ -93,10 +117,35 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
             return players;
         }
 
+
         public override bool Update(Player obj)
         {
-            throw new NotImplementedException();
+            bool success = false;
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand($"UPDATE dbo.Player SET FirstName = @FirstName, LastName = @LastName, Rank = @Rank, Gender = @Gender, Nationality = @Nationality WHERE Id = @Id", connection);
+                    cmd.Parameters.AddWithValue("Id", obj.getId()); // Assuming there is an Id property in your Player class
+                    cmd.Parameters.AddWithValue("FirstName", obj.getFirstname());
+                    cmd.Parameters.AddWithValue("LastName", obj.getLastname());
+                    cmd.Parameters.AddWithValue("Rank", obj.getRank());
+                    cmd.Parameters.AddWithValue("Gender", obj.getGender());
+                    cmd.Parameters.AddWithValue("Nationality", obj.getNationality());
+
+                    connection.Open();
+                    int res = cmd.ExecuteNonQuery();
+                    success = res > 0;
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return success;
         }
+
     }
 }
+
 
