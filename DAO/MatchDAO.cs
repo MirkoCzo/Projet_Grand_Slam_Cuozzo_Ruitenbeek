@@ -28,9 +28,8 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                     cmd.Parameters.AddWithValue("Id_Opponent_1", obj.getOpponents1().Id);
                     cmd.Parameters.AddWithValue("Id_Opponent_2", obj.getOpponents2().Id);
                     cmd.Parameters.AddWithValue("Id_Tournament", obj.getId_Tournament());
-                    cmd.Parameters.AddWithValue("Id_Court", obj.getCourt().Id);
-
-
+                    cmd.Parameters.AddWithValue("Id_Court", obj.getCourt().getId());
+                    cmd.Parameters.AddWithValue("Id_Ref", obj.getReferee().getId());
                     connection.Open();
                     int res = cmd.ExecuteNonQuery();
                     success = res > 0;
@@ -40,26 +39,129 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
             {
                 Console.WriteLine(ex.Message);
             }
+            return success;
         }
 
         public override bool Delete(Match obj)
         {
-            throw new NotImplementedException();
+            bool success = false;
+            try
+            {
+                using(SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand($"DELETE FROM dbo.Match WHERE Id_Match = @Id", connection);
+                    cmd.Parameters.AddWithValue("Id", obj.getId());
+                    connection.Open();
+                    int res = cmd.ExecuteNonQuery();
+                    success = res > 0;
+                }
+            }
+            catch(SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return success;
         }
 
         public override Match Find(int id)
         {
-            throw new NotImplementedException();
+            Match match = null;
+            try 
+            {
+               using(SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand($"SELECT * FROM dbo.Match WHERE Id_Match = @Id", connection);
+                    cmd.Parameters.AddWithValue("Id", id);
+                    connection.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    if(reader.Read())
+                    {
+                        match = new Match();
+                        match.setId((int)reader["Id_Match"]);
+                        match.setDate((DateTime)reader["Date"]);
+                        match.setDuration((int)reader["Duration"]);
+                        match.setRound((int)reader["Round"]);
+                        match.setType((int)reader["Type"]);
+                        match.setId_Tournament((int)reader["Id_Tournament"]);
+                        OpponentsDAO opponentsDAO = new OpponentsDAO();
+                        match.setOpponents1(opponentsDAO.Find((int)reader["Id_Opponent_1"]));
+                        match.setOpponents2(opponentsDAO.Find((int)reader["Id_Opponent_2"]));
+                        match.getCourt().setId((int)reader["Id_Court"]);//PAREIL POUR COURT
+                        RefereeDAO refereeDAO = new RefereeDAO();
+                        match.setReferee(refereeDAO.Find((int)reader["Id_Ref"]));
+                    }
+                }
+            }catch(SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return match;
         }
 
         public override List<Match> FindAll()
         {
-            throw new NotImplementedException();
+            List<Match> matchs = new List<Match>();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand($"SELECT * FROM dbo.Match", connection);
+                    connection.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Match match = new Match();
+                        match.setId((int)reader["Id_Match"]);
+                        match.setDate((DateTime)reader["Date"]);
+                        match.setDuration((int)reader["Duration"]);
+                        match.setRound((int)reader["Round"]);
+                        match.setType((int)reader["Type"]);
+                        match.setId_Tournament((int)reader["Id_Tournament"]);
+                        OpponentsDAO opponentsDAO = new OpponentsDAO();
+                        match.setOpponents1(opponentsDAO.Find((int)reader["Id_Opponent_1"]));
+                        match.setOpponents2(opponentsDAO.Find((int)reader["Id_Opponent_2"]));
+                        match.getCourt().setId((int)reader["Id_Court"]);//PAREIL POUR COURT
+                        RefereeDAO refereeDAO = new RefereeDAO();
+                        match.setReferee(refereeDAO.Find((int)reader["Id_Ref"]));
+                        matchs.Add(match);
+                    }
+                }
+            }
+            catch(SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return matchs;
         }
 
         public override bool Update(Match obj)
         {
-            throw new NotImplementedException();
+            bool success = false;
+            try 
+            {
+                using(SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand($"UPDATE dbo.Match SET Date = @Date, Duration = @Duration, Round = @Round, Type = @Type, Id_Opponent_1 = @Id_Opponent_1, Id_Opponent_2 = @Id_Opponent_2, Id_Tournament = @Id_Tournament, Id_Court = @Id_Court, Id_Ref = @Id_Ref WHERE Id_Match = @Id", connection);
+                    cmd.Parameters.AddWithValue("Date", obj.getDate());
+                    cmd.Parameters.AddWithValue("Duration", obj.getDuration());
+                    cmd.Parameters.AddWithValue("Round", obj.getRound());
+                    cmd.Parameters.AddWithValue("Type", obj.getType());
+                    cmd.Parameters.AddWithValue("Id_Opponent_1", obj.getOpponents1().Id);
+                    cmd.Parameters.AddWithValue("Id_Opponent_2", obj.getOpponents2().Id);
+                    cmd.Parameters.AddWithValue("Id_Tournament", obj.getId_Tournament());
+                    cmd.Parameters.AddWithValue("Id_Court", obj.getCourt().getId());
+                    cmd.Parameters.AddWithValue("Id_Ref", obj.getReferee().getId());
+                    cmd.Parameters.AddWithValue("Id", obj.getId());
+                    connection.Open();
+                    int res = cmd.ExecuteNonQuery();
+                    success = res > 0;
+                }
+            }
+            catch(SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return success;
         }
     }
 }
