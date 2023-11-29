@@ -87,7 +87,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
             {
                 Console.WriteLine(ex.Message);
             }
-            return players;
+            return referees;
         }
     }
 }
