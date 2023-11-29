@@ -21,5 +21,6 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         {
             isAvailable = true;
         }
+        
     }
 }

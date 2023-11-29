@@ -12,6 +12,11 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         private int id;
         private string name;
         private List<Court> courtsList;
+        private List<Match> matchesList;
+        private List<Player> playersList;
+        private List<Referee> refereesList;
+        private List<Schedule> scheduleList;
+
 
         public void Play()
         {
