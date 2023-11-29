@@ -21,6 +21,33 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         {
             isAvailable = true;
         }
+        public int getId() 
+        {
+            return id;
+        }
+        public int getNbSpectators()
+        {
+            return nbSpectators;
+        }
         
+        public bool getCovered()
+        {
+            return covered;
+        }
+        
+        public void setId(int id)
+        {
+            this.id = id;
+        }
+
+        public void setNbSpectators(int nbSpectators)
+        {
+            this.nbSpectators = nbSpectators;
+        }
+
+        public void setCovered(bool covered)
+        {
+            this.covered=covered;
+        }
     }
 }
