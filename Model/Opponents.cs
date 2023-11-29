@@ -18,7 +18,8 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
             this.player1 = player1;
             this.player2 = player2;
         }
-        public int Id { get { return id; }}
-
+        public int Id { get { return id; } set { this.id = value; } }
+        public Player Player1 { get { return player1; } set { this.player1 = value; } }
+        public Player? Player2 { get { return player2; } set { this.player2 = value; } }
     }
 }
