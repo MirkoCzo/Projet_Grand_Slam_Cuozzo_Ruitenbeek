@@ -17,6 +17,14 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         private List<Referee> refereesList;
         private List<Schedule> scheduleList;
 
+        public int getId() { return id; }
+
+        public string getName() { return name; }
+
+        public void setId(int id) { this.id = id;}
+
+        public void setName(string name) { this.name = name;}
+
 
         public void Play()
         {
