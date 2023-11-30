@@ -12,11 +12,14 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
         private int game_Number;
         private int score_Op_One;
         private int score_Op_Two;
+        private int id_set;
 
         public int getId() { return id; }
         public int getGameNumber() { return game_Number;}
         public int getScoreOpOne() { return score_Op_One;}
         public int getScoreOpTwo() {  return score_Op_Two;}
+        public int getIdSet() { return id_set; }
+        public void setIdSet(int id_set) { this.id_set = id_set; }
         public void setId(int id) { this.id = id;}
         public void setGameNumber(int game_Number) {  this.game_Number = game_Number;}
         public void setScoreOpOne(int score) {  this.score_Op_One = score;}

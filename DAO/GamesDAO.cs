@@ -17,10 +17,12 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    SqlCommand cmd = new SqlCommand($"INSERT INTO dbo.Games (Game_Number,Score_Op_One,Score_Op_Two) VALUES (@GameNumber, @ScoreOne, @ScoreTwo)", connection);
+                    SqlCommand cmd = new SqlCommand($"INSERT INTO dbo.Games (Game_Number,Score_Op_One,Score_Op_Two,Id_Set) VALUES (@GameNumber, @ScoreOne, @ScoreTwo, @Id_Set)", connection);
                     cmd.Parameters.AddWithValue("GameNumber", obj.getGameNumber());
-                    cmd.Parameters.AddWithValue("ScoreOne",obj.getScoreOpOne);
-                    cmd.Parameters.AddWithValue("ScoreTwo", obj.getScoreOpTwo);
+                    cmd.Parameters.AddWithValue("ScoreOne",obj.getScoreOpOne());
+                    cmd.Parameters.AddWithValue("ScoreTwo", obj.getScoreOpTwo());
+                    cmd.Parameters.AddWithValue("Id_Set", obj.getIdSet());
+
                     connection.Open();
                     int res = cmd.ExecuteNonQuery();
                     succes = res > 0;
@@ -71,6 +73,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                         game.setGameNumber(reader.GetInt32(1));
                         game.setScoreOpOne(reader.GetInt32(2));
                         game.setScoreOpTwo(reader.GetInt32(3));
+                        game.setIdSet(reader.GetInt32(4));
                     }
                 }
             }
@@ -98,6 +101,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                         game.setGameNumber(reader.GetInt32(1));
                         game.setScoreOpOne(reader.GetInt32(2));
                         game.setScoreOpTwo(reader.GetInt32(3));
+                        game.setIdSet(reader.GetInt32(4));
                         games.Add(game);
                     }
                 }
@@ -116,11 +120,13 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    SqlCommand cmd = new SqlCommand($"UPDATE dbo.Games SET Game_Number = @Game, Score_Op_One = @ScoreOne, Score_Op_Two = @ScoreTwo WHERE Id_Game = @Id", connection);
+                    SqlCommand cmd = new SqlCommand($"UPDATE dbo.Games SET Game_Number = @Game, Score_Op_One = @ScoreOne, Score_Op_Two = @ScoreTwo, Id_Set=@Id_Set WHERE Id_Game = @Id", connection);
                     cmd.Parameters.AddWithValue("Id", obj.getId());
                     cmd.Parameters.AddWithValue("Game",obj.getGameNumber());
                     cmd.Parameters.AddWithValue("ScoreOne", obj.getScoreOpOne());
                     cmd.Parameters.AddWithValue("ScoreTwo", obj.getScoreOpTwo());
+                    cmd.Parameters.AddWithValue("Id_Set", obj.getIdSet());
+
                     connection.Open();
                     int res = cmd.ExecuteNonQuery();
                     success = res > 0;
