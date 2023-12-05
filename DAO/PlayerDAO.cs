@@ -143,6 +143,36 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
             }
             return success;
         }
+        public List<Player> FindByGender(string gender)
+        {
+            List<Player> players = new List<Player>();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand($"SELECT * FROM dbo.Player Where Gender = @Gender", connection);
+                    cmd.Parameters.AddWithValue("Gender", gender);
+                    connection.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Player player = new Player();
+                        player.setId(reader.GetInt32(0));
+                        player.setFirstname(reader.GetString(1));
+                        player.setLastname(reader.GetString(2));
+                        player.setRank(reader.GetInt32(3));
+                        player.setGender(reader.GetString(4));
+                        player.setNationality(reader.GetString(5));
+                        players.Add(player);
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return players;
+        }
 
     }
 }
