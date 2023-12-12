@@ -57,6 +57,8 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                 s.Fill(MenList,WomenList);
             }
         }
+
+
         public List<Referee> FetchReferees()
         {
             RefereeDAO refereeDAO = new RefereeDAO();
@@ -69,13 +71,16 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             courtsList = courtDAO.FindAll();
             return courtsList;
         }
-        public void GeneratesMatchs()
+        public void InitializeSchedule()
         {
-            foreach(Schedule s in scheduleList)
+            foreach (Schedule s in scheduleList)
             {
                 s.Initialize();
             }
             FillSchedule();
+        }
+        public void GeneratesMatchs()
+        {
             foreach(Schedule s in scheduleList)
             {
                 s.CreateMatchs();
