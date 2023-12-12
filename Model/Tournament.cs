@@ -1,8 +1,10 @@
 ﻿using Projet_Grand_Slam_Cuozzo_Ruitenbeek;
 using Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO;
+using Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using static Projet_Grand_Slam_Cuozzo_Ruitenbeek.Schedule;
@@ -14,12 +16,16 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         private int id;
         private string name;
         private List<Court> courtsList;
-        private List<Match> matchesList;
-        private List<Player> playersList;
         private List<Referee> refereesList;
         private List<Schedule> scheduleList;
 
-
+        public Tournament(int id, string name)
+        {
+            this.id = id;
+            this.name = name;
+            this.courtsList = FetchCourts();
+            this.refereesList = FetchReferees();
+        }
         public int getId() { return id; }
 
         public string getName() { return name; }
@@ -41,11 +47,15 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                 this.scheduleList.Add(new Schedule(type));
             }
         }
-        public List<Player> FetchPlayers(string gender)
+        
+        public void FillSchedule()
         {
-            PlayerDAO playerDAO = new PlayerDAO();
-            playersList = playerDAO.FindByGender(gender);
-            return playersList;
+            List<Player> MenList = FetchPlayers("MALE");
+            List<Player> WomenList = FetchPlayers("FEMALE");
+            foreach (Schedule s in scheduleList)
+            {
+                s.Fill(MenList,WomenList);
+            }
         }
         public List<Referee> FetchReferees()
         {
@@ -64,8 +74,22 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             foreach(Schedule s in scheduleList)
             {
                 s.Initialize();
-            }  
+            }
+            FillSchedule();
+            foreach(Schedule s in scheduleList)
+            {
+                s.CreateMatchs();
+            }
+
+        }
+        public List<Player> FetchPlayers(string gender)
+        {
+            PlayerDAO playerDAO = new PlayerDAO();
+            List<Player> playersList = new List<Player>();
+            playersList = playerDAO.FindByGender(gender);
+            return playersList;
         }
         
+
     }
 }

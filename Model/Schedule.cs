@@ -1,4 +1,5 @@
-﻿using Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model;
+﻿using Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO;
+using Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             this.scheduleType = scheduleType;
             this.actualRound = 0;
             this.matcheList = new Queue<Match>();
+            Initialize();
         }
         public int NbWinningSets()
         {
@@ -79,6 +81,107 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                     this.matcheList.Enqueue(new Match());
                 }
             }            
+        }
+        public void Fill(List<Player> men, List<Player> women)
+        {
+            if (this.scheduleType == ScheduleType.GentlemenSingle || this.scheduleType == ScheduleType.LadiesSingle)
+            {
+                if (this.scheduleType == ScheduleType.GentlemenSingle)
+                {
+                   GenerateOpponentsSingle(men);
+                }
+                else
+                {
+                   GenerateOpponentsSingle(women);
+                }
+            }
+            else
+            {
+                GenerateOpponentsDouble(this.scheduleType, men, women);
+            }
+        }
+        private void GenerateOpponentsDouble(ScheduleType type, List<Player> men, List<Player> women)
+        {
+            List<Opponents> opponentsList = new List<Opponents>();
+            if(type == ScheduleType.GentlemenDouble)
+            {
+                for (int i = 0; i < 64; i++)
+                {
+                    opponentsList.Add(new Opponents(i, men[i *2], men[(i*2)+1]));
+                }
+                this.opponentsList = opponentsList;
+                Shuffle(opponentsList);
+            }
+            else if(type == ScheduleType.LadiesDouble)
+            {
+                for (int i = 0; i < 64; i++)
+                {
+                    opponentsList.Add(new Opponents(i, women[i * 2], women[(i * 2) + 1]));
+                }
+                this.opponentsList = opponentsList;
+                Shuffle(opponentsList);
+
+
+            }
+            else if(type == ScheduleType.MixedDouble)
+            {
+                List<Player> MixedList= Schedule.MixList(men, women, 64);
+                for (int i = 0; i < 64; i++)
+                {
+                    opponentsList.Add(new Opponents(i, MixedList[i * 2], MixedList[(i * 2) + 1]));
+                }
+                this.opponentsList = opponentsList;
+                Shuffle(opponentsList);
+
+            }
+
+        }
+        public void GenerateOpponentsSingle(List<Player> list)
+        {
+            List<Opponents> opponentsList = new List<Opponents>();
+            for (int i = 0; i < 128; i++)
+            {
+                opponentsList.Add(new Opponents(i, list[i], null));
+            }
+            this.opponentsList = opponentsList;
+            Shuffle(opponentsList);
+
+        }
+        public void CreateMatchs()
+        {
+            for(int i = 0; i < opponentsList.Count; i+=2)
+            {
+                Match  m = new Match();
+                m.setOpponents1(this.opponentsList[i]);
+                m.setOpponents2(this.opponentsList[i+1]);
+                this.matcheList.Enqueue(m);
+            }
+        }
+
+        static List<T> MixList<T>(List<T> liste1, List<T> liste2, int taille)
+        {
+            List<T> res = new List<T>();
+            taille = Math.Min(Math.Min(liste1.Count, liste2.Count), taille);
+            for (int i = 0; i < taille; i++)
+            {
+                res.Add(liste1[i]);
+                res.Add(liste2[i]);
+            }
+            return res;
+        }
+        static void Shuffle<T>(List<T> list)
+        {
+            Random rand = new Random();
+
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rand.Next(n + 1);
+                T valeur = list[k];
+                list[k] = list[n];
+                list[n] = valeur;
+            }
         }
     }
 }
