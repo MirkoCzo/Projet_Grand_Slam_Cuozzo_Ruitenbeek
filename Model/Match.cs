@@ -120,6 +120,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         {
             this.type = type;
         }
+        
 
     }
 }
