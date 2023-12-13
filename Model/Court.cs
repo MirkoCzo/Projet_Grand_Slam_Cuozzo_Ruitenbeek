@@ -12,6 +12,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         private bool isAvailable;
         private int nbSpectators;
         private bool covered;
+        private static Queue<Court> courts = new Queue<Court>();
 
         public bool Available()
         {
@@ -20,6 +21,10 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         public void Release()
         {
             isAvailable = true;
+        }
+        public void Occupy()
+        {
+            isAvailable = false;
         }
 
         public int getId()

@@ -24,5 +24,24 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Tournament t = new Tournament(1,"test");
+            t.Play();
+            TextBLock textBlockOpponents = new TextBLock();
+
+            foreach (Schedule s in t.GetSchedules())
+            {
+                foreach (Match m in s.getMatchsList())
+                {
+                    // Ajoutez les adversaires à la TextBox
+                    textBlockOpponents.Text +=  $"Opponents 1: {m.getOpponents1()}\n";
+                    textBlockOpponents.Text += $"Opponents 2: {m.getOpponents2()}\n";
+                    textBlockOpponents.Text += "--------------------------------\n";
+                }
+            }
+
+        }
     }
 }
