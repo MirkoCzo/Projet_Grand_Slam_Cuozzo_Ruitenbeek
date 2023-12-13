@@ -93,7 +93,8 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                         Court court = new Court();
                         court.setId(reader.GetInt32(0));
                         court.setNbSpectators(reader.GetInt32(1));
-                        court.setCovered(reader.GetByte(2) != 0);
+                        bool covered = reader.GetInt32(2) != 0;
+                        court.setCovered(covered);
                         courts.Add(court);
                     }
                 }

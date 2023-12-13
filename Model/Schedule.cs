@@ -22,14 +22,14 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         private ScheduleType scheduleType;
         private int actualRound;
         private Queue<Match> matcheList;
-        private List<Opponents> opponentsList;
+        private Queue<Opponents> opponentsList;
+        OpponentsDAO opponentsDAO = new OpponentsDAO();
 
         public Schedule(ScheduleType scheduleType)
         {
             this.scheduleType = scheduleType;
             this.actualRound = 0;
             this.matcheList = new Queue<Match>();
-            Initialize();
         }
         public int NbWinningSets()
         {
@@ -49,9 +49,25 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                     throw new ArgumentOutOfRangeException();
             }
         }
-        public void PlayNextRound()
-        {
+        public void PlayNextRound() {
+            for(int i = 0; i < opponentsList.Count / 2;  i++)
+            {
+                Opponents op1 = opponentsList.Dequeue();
+                Opponents op2 = opponentsList.Dequeue();
+                Match m = new Match();
+                m.setOpponents1(op1);
+                m.setOpponents2(op2);
+                m.setDate(DateTime.Now);
+                m.setReferee(null);
+                m.setCourt(null);
+                m.setRound(actualRound);
+                matcheList.Enqueue(m);
+                m.Play();
+               
+                
 
+            }
+            this.actualRound++;
         }
         public Player GetWinner()
         {
@@ -65,23 +81,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         {
             return actualRound;
         }
-        public void Initialize()
-        {
-            if (scheduleType == ScheduleType.GentlemenSingle|| scheduleType == ScheduleType.LadiesSingle)
-            {
-                for (int i = 0; i < 64; i++)
-                {
-                    this.matcheList.Enqueue(new Match());
-                }
-            }
-            else if (scheduleType == ScheduleType.GentlemenDouble || scheduleType == ScheduleType.LadiesDouble || scheduleType == ScheduleType.MixedDouble)
-            {
-                for (int i = 0; i < 32; i++)
-                {
-                    this.matcheList.Enqueue(new Match());
-                }
-            }            
-        }
+       
         public void Fill(List<Player> men, List<Player> women)
         {
             if (this.scheduleType == ScheduleType.GentlemenSingle || this.scheduleType == ScheduleType.LadiesSingle)
@@ -100,14 +100,18 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                 GenerateOpponentsDouble(this.scheduleType, men, women);
             }
         }
-        private void GenerateOpponentsDouble(ScheduleType type, List<Player> men, List<Player> women)
+        private void GenerateOpponentsDouble(ScheduleType type, List<Player> men, List<Player> women)//GENERER LA LISTE DES OPPOSANTS EN CAS DE DOUBLE 64 opposants 32 matchs
         {
-            List<Opponents> opponentsList = new List<Opponents>();
+            Queue<Opponents> opponentsList = new Queue<Opponents>();
             if(type == ScheduleType.GentlemenDouble)
             {
                 for (int i = 0; i < 64; i++)
                 {
-                    opponentsList.Add(new Opponents(i, men[i *2], men[(i*2)+1]));
+                    Opponents oponnents = new Opponents(men[i *2], men[(i*2)+1]);
+                    if (opponentsDAO.Create(oponnents))
+                    {
+                        opponentsList.Enqueue(oponnents);
+                    }
                 }
                 this.opponentsList = opponentsList;
                 Shuffle(opponentsList);
@@ -116,7 +120,11 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             {
                 for (int i = 0; i < 64; i++)
                 {
-                    opponentsList.Add(new Opponents(i, women[i * 2], women[(i * 2) + 1]));
+                    Opponents opponents =  new Opponents(women[i * 2], women[(i * 2) + 1]);
+                    if (opponentsDAO.Create(opponents))
+                    {
+                        opponentsList.Enqueue(opponents);
+                    }
                 }
                 this.opponentsList = opponentsList;
                 Shuffle(opponentsList);
@@ -128,7 +136,11 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                 List<Player> MixedList= Schedule.MixList(men, women, 64);
                 for (int i = 0; i < 64; i++)
                 {
-                    opponentsList.Add(new Opponents(i, MixedList[i * 2], MixedList[(i * 2) + 1]));
+                    Opponents oponents = new Opponents(MixedList[i * 2], MixedList[(i * 2) + 1]);
+                    if (opponentsDAO.Create(oponents))
+                    {
+                        opponentsList.Enqueue(oponents);
+                    }
                 }
                 this.opponentsList = opponentsList;
                 Shuffle(opponentsList);
@@ -136,26 +148,25 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             }
 
         }
-        public void GenerateOpponentsSingle(List<Player> list)
+        public void GenerateOpponentsSingle(List<Player> list)//GENERER LA LISTE DES OPPOSANTS EN CAS DE SIMPLE 128 opposants 64 matchs
         {
-            List<Opponents> opponentsList = new List<Opponents>();
+            Queue<Opponents> opponentsList = new Queue<Opponents>();
             for (int i = 0; i < 128; i++)
             {
-                opponentsList.Add(new Opponents(i, list[i], null));
+                Opponents opponents = new Opponents(list[i], null);
+                if (opponentsDAO.Create(opponents))
+                {
+                    opponentsList.Enqueue(opponents);
+                }
             }
             this.opponentsList = opponentsList;
             Shuffle(opponentsList);
 
         }
-        public void CreateMatchs()
+        
+        public Queue<Match> getMatchsList()
         {
-            for(int i = 0; i < opponentsList.Count; i+=2)
-            {
-                Match  m = new Match();
-                m.setOpponents1(this.opponentsList[i]);
-                m.setOpponents2(this.opponentsList[i+1]);
-                this.matcheList.Enqueue(m);
-            }
+            return matcheList;
         }
 
         static List<T> MixList<T>(List<T> liste1, List<T> liste2, int taille)
@@ -169,18 +180,25 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             }
             return res;
         }
-        static void Shuffle<T>(List<T> list)
+        static void Shuffle<T>(Queue<T> queue)
         {
             Random rand = new Random();
+            T[] array = queue.ToArray();
 
-            int n = list.Count;
+            int n = array.Length;
             while (n > 1)
             {
                 n--;
                 int k = rand.Next(n + 1);
-                T valeur = list[k];
-                list[k] = list[n];
-                list[n] = valeur;
+                T value = array[k];
+                array[k] = array[n];
+                array[n] = value;
+            }
+
+            queue.Clear();
+            foreach (T item in array)
+            {
+                queue.Enqueue(item);
             }
         }
     }
