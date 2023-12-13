@@ -141,6 +141,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
                     game.PlayGame();
                     UpdateSets(game);
                 }
+                games.Add(game);
             }
 
         }
