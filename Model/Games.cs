@@ -17,6 +17,9 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
         public List<int> getScoreOpOne() { return score_Op_One; }
         public List<int> getScoreOpTwo() { return score_Op_Two; }
         public int getIdSet() { return id_set; }
+        public int getGameNumber() { return gameNumber; }
+
+        public void setGameNumber(int gameNumber) { this.gameNumber = gameNumber; }
         public void setIdSet(int id_set) { this.id_set = id_set; }
         public void setId(int id) { this.id = id; }
         public void setScoreOpOne(List<int> score) { this.score_Op_One = score; }
@@ -36,6 +39,10 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
             this.score_Op_One = new List<int>();
             this.score_Op_Two = new List<int>();
             this.gameNumber = gameNumber;
+        }
+
+        public Games()
+        {
         }
 
         public void PlayGame()

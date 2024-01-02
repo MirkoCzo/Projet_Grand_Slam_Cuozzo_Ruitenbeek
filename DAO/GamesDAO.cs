@@ -70,8 +70,13 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                     {
                         game.setId(reader.GetInt32(0));
                         game.setGameNumber(reader.GetInt32(1));
-                        game.setScoreOpOne(reader.GetInt32(2));
-                        game.setScoreOpTwo(reader.GetInt32(3));
+
+                        List<int> scoresOpOne = new List<int> { reader.GetInt32(2) };
+                        List<int> scoresOpTwo = new List<int> { reader.GetInt32(3) };
+
+                        game.setScoreOpOne(scoresOpOne);
+                        game.setScoreOpTwo(scoresOpTwo);
+
                         game.setIdSet(reader.GetInt32(4));
                     }
                 }
@@ -98,8 +103,13 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                         Games game = new Games();
                         game.setId(reader.GetInt32(0));
                         game.setGameNumber(reader.GetInt32(1));
-                        game.setScoreOpOne(reader.GetInt32(2));
-                        game.setScoreOpTwo(reader.GetInt32(3));
+
+                        List<int> scoresOpOne = new List<int> { reader.GetInt32(2) };
+                        List<int> scoresOpTwo = new List<int> { reader.GetInt32(3) };
+
+                        game.setScoreOpOne(scoresOpOne);
+                        game.setScoreOpTwo(scoresOpTwo);
+
                         game.setIdSet(reader.GetInt32(4));
                         games.Add(game);
                     }
