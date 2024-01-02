@@ -9,9 +9,9 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
 {
     class TournamentDAO : DAO<Tournament>
     {
-        public override bool Create(Tournament obj)
+        public override int Create(Tournament obj)
         {
-            bool succes = false;
+            int res = -1;
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -19,15 +19,14 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                     SqlCommand cmd = new SqlCommand($"INSERT INTO dbo.Tournament (Name) VALUES (@Name)", connection);
                     cmd.Parameters.AddWithValue("Name", obj.getName());
                     connection.Open();
-                    int res = cmd.ExecuteNonQuery();
-                    succes = res > 0;
+                    res = Convert.ToInt32(cmd.ExecuteScalar());
                 }
             }
             catch (SqlException e)
             {
                 Console.WriteLine(e.Message);
             }
-            return succes;
+            return res;
         }
 
         public override bool Delete(Tournament obj)

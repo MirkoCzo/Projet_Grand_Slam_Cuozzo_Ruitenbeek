@@ -16,7 +16,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
         {
             connectionString = ConfigurationManager.ConnectionStrings["ProjectDB"].ConnectionString;
         }
-        public abstract bool Create(T obj);
+        public abstract int Create(T obj);
         public abstract bool Delete(T obj);
         public abstract bool Update(T obj);
         public abstract T Find(int id);

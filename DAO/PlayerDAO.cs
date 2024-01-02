@@ -11,9 +11,9 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
 {
     internal class PlayerDAO : DAO<Player>
     {
-        public override bool Create(Player obj)
+        public override int Create(Player obj)
         {
-            bool succes = false;
+            int res = -1;
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -25,15 +25,14 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                     cmd.Parameters.AddWithValue("Gender", obj.getGender());
                     cmd.Parameters.AddWithValue("Nationality", obj.getNationality());
                     connection.Open();
-                    int res = cmd.ExecuteNonQuery();
-                    succes = res > 0;
+                    res = Convert.ToInt32(cmd.ExecuteScalar());
                 }
             }
             catch (SqlException e)
             {
                 Console.WriteLine(e.Message);
             }
-            return succes;
+            return res;
         }
 
 

@@ -13,9 +13,9 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
         {
         }
 
-        public override bool Create(Match obj)
+        public override int Create(Match obj)
         {
-            bool success = false;
+            int res = -1;
             try
             {
                 using(SqlConnection connection = new SqlConnection(connectionString))
@@ -31,15 +31,14 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                     cmd.Parameters.AddWithValue("Id_Court", obj.getCourt().getId());
                     cmd.Parameters.AddWithValue("Id_Ref", obj.getReferee().getId());
                     connection.Open();
-                    int res = cmd.ExecuteNonQuery();
-                    success = res > 0;
+                    res = Convert.ToInt32(cmd.ExecuteScalar());
                 }
 
             }catch(SqlException ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            return success;
+            return res;
         }
 
         public override bool Delete(Match obj)
