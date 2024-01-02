@@ -102,13 +102,15 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         }
         private void GenerateOpponentsDouble(ScheduleType type, List<Player> men, List<Player> women)//GENERER LA LISTE DES OPPOSANTS EN CAS DE DOUBLE 64 opposants 32 matchs
         {
+            int IsOpponentCreated;
             Queue<Opponents> opponentsList = new Queue<Opponents>();
             if(type == ScheduleType.GentlemenDouble)
             {
                 for (int i = 0; i < 64; i++)
                 {
                     Opponents oponnents = new Opponents(men[i *2], men[(i*2)+1]);
-                    if (opponentsDAO.Create(oponnents))
+                    IsOpponentCreated = opponentsDAO.Create(oponnents);
+                    if (IsOpponentCreated!=-1)
                     {
                         opponentsList.Enqueue(oponnents);
                     }
@@ -121,7 +123,8 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                 for (int i = 0; i < 64; i++)
                 {
                     Opponents opponents =  new Opponents(women[i * 2], women[(i * 2) + 1]);
-                    if (opponentsDAO.Create(opponents))
+                    IsOpponentCreated = opponentsDAO.Create(opponents);
+                    if (IsOpponentCreated != -1)
                     {
                         opponentsList.Enqueue(opponents);
                     }
@@ -137,7 +140,8 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                 for (int i = 0; i < 64; i++)
                 {
                     Opponents oponents = new Opponents(MixedList[i * 2], MixedList[(i * 2) + 1]);
-                    if (opponentsDAO.Create(oponents))
+                    IsOpponentCreated = opponentsDAO.Create(oponents);
+                    if (IsOpponentCreated != -1)
                     {
                         opponentsList.Enqueue(oponents);
                     }
@@ -150,11 +154,13 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         }
         public void GenerateOpponentsSingle(List<Player> list)//GENERER LA LISTE DES OPPOSANTS EN CAS DE SIMPLE 128 opposants 64 matchs
         {
+            int IsOpponentCreated;
             Queue<Opponents> opponentsList = new Queue<Opponents>();
             for (int i = 0; i < 128; i++)
             {
                 Opponents opponents = new Opponents(list[i], null);
-                if (opponentsDAO.Create(opponents))
+                IsOpponentCreated = opponentsDAO.Create(opponents);
+                if (IsOpponentCreated != -1)
                 {
                     opponentsList.Enqueue(opponents);
                 }
