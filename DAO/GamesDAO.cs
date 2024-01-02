@@ -10,9 +10,9 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
 {
     internal class GamesDAO : DAO<Games>
     {
-        public override bool Create(Games obj)
+        public override int Create(Games obj)
         {
-            bool succes = false;
+            int res = -1;
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -24,15 +24,14 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                     cmd.Parameters.AddWithValue("Id_Set", obj.getIdSet());
 
                     connection.Open();
-                    int res = cmd.ExecuteNonQuery();
-                    succes = res > 0;
+                    res = Convert.ToInt32(cmd.ExecuteScalar());
                 }
             }
             catch (SqlException e)
             {
                 Console.WriteLine(e.Message);
             }
-            return succes;
+            return res;
         }
 
         public override bool Delete(Games obj)

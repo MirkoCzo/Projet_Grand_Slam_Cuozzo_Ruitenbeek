@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -9,9 +10,9 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
 {
     internal class SetDAO : DAO<Set>
     {
-        public override bool Create(Set obj)
+        public override int Create(Set obj)
         {
-            bool success = false;
+            int res = -1;
             try
             {
                 using(SqlConnection connection = new SqlConnection(connectionString))
@@ -24,8 +25,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                         command.Parameters.AddWithValue("scoreOp2", obj.getScoreOp2());
                         command.Parameters.AddWithValue("setNumber", obj.getSetNumber());
                         command.Parameters.AddWithValue("id_match", obj.getId_match());
-                        command.ExecuteNonQuery();
-                        success = true;
+                        res = Convert.ToInt32(command.ExecuteScalar());
                     }
                 }
 
@@ -33,7 +33,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
             {
                 Console.WriteLine(e.Message);
             }
-            return success;
+            return res;
         }
 
         public override bool Delete(Set obj)

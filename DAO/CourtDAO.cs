@@ -9,9 +9,9 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
 {
     class CourtDAO : DAO<Court>
     {
-        public override bool Create(Court obj)
+        public override int Create(Court obj)
         {
-            bool succes = false;
+            int id = -1;
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -20,15 +20,15 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                     cmd.Parameters.AddWithValue("NbSpec",obj.getNbSpectators());
                     cmd.Parameters.AddWithValue("Covered", obj.getCovered() ? 1 : 0);
                     connection.Open();
-                    int res = cmd.ExecuteNonQuery();
-                    succes = res > 0;
+                    id = Convert.ToInt32(cmd.ExecuteScalar());
+
                 }
             }
             catch (SqlException e)
             {
                 Console.WriteLine(e.Message);
             }
-            return succes;
+            return id;
         }
 
         public override bool Delete(Court obj)

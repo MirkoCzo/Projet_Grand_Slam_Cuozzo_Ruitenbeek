@@ -12,9 +12,9 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
 {
     internal class RefereeDAO : DAO<Referee>
     {
-        public override bool Create(Referee obj)
+        public override int Create(Referee obj)
         {
-            bool success = false;
+            int res = -1;
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -24,15 +24,14 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                     cmd.Parameters.AddWithValue("LastName", obj.getLastname());
                     cmd.Parameters.AddWithValue("Nationality",obj.getNationality());
                     connection.Open();
-                    int res = cmd.ExecuteNonQuery();
-                    success = res > 0;
+                    res = Convert.ToInt32(cmd.ExecuteScalar());
                 }
             }
             catch (SqlException ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            return success;
+            return res;
         }
 
         public override bool Delete(Referee obj)
