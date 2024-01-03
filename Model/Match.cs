@@ -23,14 +23,14 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         private int id_Tournament;
 
 
-        public Player GetWinner()
+        public Opponents GetWinner()
         {
             return this.GetWinner();
         }
 
-        public void Play()
+        public async Task<Opponents> Play()
         {
-
+            return GetWinner();
         }
         public int getId()
         {

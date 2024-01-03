@@ -3,6 +3,7 @@ using Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO;
 using Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model;
 using System;
 using System.Collections.Generic;
+using System.IO.Packaging;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -13,16 +14,19 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
 {
     internal class Tournament
     {
-        private int id;
+        public static int id;
         private string name;
-        //private List<Court> courtsList;
-        //private List<Referee> refereesList;
+        public static Queue<Court> courtsList;
+        public static Queue<Referee> refereesList;
+        public static DateTime date;
         private List<Schedule> scheduleList;
 
-        public Tournament(int id, string name)
+        public Tournament(int id, string name, DateTime date)
         {
-            this.id = id;
+            Tournament.id = id;
             this.name = name;
+            Tournament.date = date;
+            FillList();
         }
         public Tournament()
         {
@@ -63,6 +67,15 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             List<Player> playersList = new List<Player>();
             playersList = playerDAO.FindByGender(gender);
             return playersList;
+        }
+        public void FillList()
+        {
+            CourtDAO courtDAO = new CourtDAO();
+            Queue<Court> tmp = new Queue<Court>(courtDAO.FindAll());
+            Tournament.courtsList = tmp;
+            RefereeDAO refereeDAO = new RefereeDAO();
+            Queue<Referee> tmp2 = new Queue<Referee>(refereeDAO.FindAll());
+            Tournament.refereesList = tmp2;
         }
         
         public int getId() { return id; }
