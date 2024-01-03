@@ -30,6 +30,9 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
 
         public async Task<Opponents> Play()
         {
+            Set set = new Set(this.id);
+            set.Play();
+            if(set.)
             return GetWinner();
         }
         public int getId()

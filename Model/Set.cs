@@ -19,11 +19,17 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
         private bool isFinished;
         public int id_match;
         private List<Games> games;
+        private Opponents winner;
+        private GamesDAO gamesDAO;
 
         public Set(int id,int idMatch)
         {
             this.id = id;
             this.id_match= idMatch;
+        }
+        public Set(int idMatch)
+        {
+            this.id_match = idMatch;
         }
 
         public int getId()
@@ -141,8 +147,21 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
                     game.PlayGame();
                     UpdateSets(game);
                 }
+                game.setGameNumber(gameNumber);
+                game.setIdSet(this.id);
+                int id = gamesDAO.Create(game);
+                game.setId(id);
                 games.Add(game);
             }
+            if (scoreOp1 > scoreOp2)
+            {
+                winner = match.getOpponents1();
+            }
+            else
+            {
+                winner = match.getOpponents2();
+            }
+
 
         }
         private bool CheckIfSetIsFinished(int ScoreOp1, int ScoreOp2, Match match)
@@ -208,6 +227,10 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
         {
             Schedule schedule = new Schedule(scheduleType);
             return schedule.NbWinningSets();
+        }
+        private Opponents getWinner()
+        {
+            return this.winner;
         }
     }
 }
