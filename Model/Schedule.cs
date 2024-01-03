@@ -24,6 +24,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         private Queue<Match> matcheList;
         private Queue<Opponents> opponentsList;
         OpponentsDAO opponentsDAO = new OpponentsDAO();
+        MatchDAO matchDAO = new MatchDAO();
 
         public Schedule(ScheduleType scheduleType)
         {
@@ -49,24 +50,59 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                     throw new ArgumentOutOfRangeException();
             }
         }
-        public void PlayNextRound() {
-            for(int i = 0; i < opponentsList.Count / 2;  i++)
+        public async void PlayNextRound() {
+            int matchesPlayed = 0;
+            DateTime currentDate = Tournament.date;
+            int matchesCount = opponentsList.Count/2;
+            List<Opponents> winners = new List<Opponents>();
+            for(int i = 0; i < matchesCount;  i++)
             {
-                Opponents op1 = opponentsList.Dequeue();
-                Opponents op2 = opponentsList.Dequeue();
-                Match m = new Match();
-                m.setOpponents1(op1);
-                m.setOpponents2(op2);
-                m.setDate(DateTime.Now);
-                m.setReferee(null);
-                m.setCourt(null);
-                m.setRound(actualRound);
-                matcheList.Enqueue(m);
-                m.Play();
-               
-                
-
+                if(Tournament.courtsList.Count == 0 || Tournament.refereesList.Count == 0)
+                {
+                    matchesCount--;
+                }
+                else
+                {
+                    //Set up Opponents 
+                    Opponents op1 = opponentsList.Dequeue();
+                    Opponents op2 = opponentsList.Dequeue();
+                    Match m = new Match();
+                    m.setType((int)scheduleType);
+                    m.setId_Tournament(Tournament.id);
+                    m.setOpponents1(op1);
+                    m.setOpponents2(op2);
+                    //Set up Date
+                    if (matchesPlayed % 30 == 0)
+                    {
+                        currentDate = currentDate.AddDays(1);
+                        currentDate = currentDate.Date.AddHours(10);
+                    }
+                    else
+                    {
+                        currentDate.AddHours(4);
+                    }
+                    m.setDate(currentDate);
+                    //Set up Court-Referee
+                    Court court = Tournament.courtsList.Dequeue();
+                    Referee referee = Tournament.refereesList.Dequeue();
+                    m.setReferee(referee);
+                    m.setCourt(court);
+                    m.setRound(actualRound);
+                    int matchId = matchDAO.Create(m);
+                    if (matchId != -1)
+                    {
+                        m.setId(matchId);
+                    }
+                    await m.Play();
+                    matcheList.Enqueue(m);
+                    Tournament.courtsList.Enqueue(court);
+                    Tournament.refereesList.Enqueue(referee);
+                    winners.Add(m.GetWinner());
+                    matchesPlayed++;
+                }                           
             }
+            opponentsList = new Queue<Opponents>(winners);
+            Tournament.date = currentDate;
             this.actualRound++;
         }
         public Player GetWinner()
@@ -112,6 +148,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                     IsOpponentCreated = opponentsDAO.Create(oponnents);
                     if (IsOpponentCreated!=-1)
                     {
+                        oponnents.Id = IsOpponentCreated;
                         opponentsList.Enqueue(oponnents);
                     }
                 }
@@ -126,6 +163,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                     IsOpponentCreated = opponentsDAO.Create(opponents);
                     if (IsOpponentCreated != -1)
                     {
+                        opponents.Id = IsOpponentCreated;
                         opponentsList.Enqueue(opponents);
                     }
                 }
@@ -143,6 +181,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                     IsOpponentCreated = opponentsDAO.Create(oponents);
                     if (IsOpponentCreated != -1)
                     {
+                        oponents.Id = IsOpponentCreated;
                         opponentsList.Enqueue(oponents);
                     }
                 }
@@ -162,6 +201,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                 IsOpponentCreated = opponentsDAO.Create(opponents);
                 if (IsOpponentCreated != -1)
                 {
+                    opponents.Id = IsOpponentCreated;
                     opponentsList.Enqueue(opponents);
                 }
             }

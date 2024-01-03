@@ -13,7 +13,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
     {
 
         private bool isAvailable;
-        private static Queue<Referee> referees = new Queue<Referee>();
+        //private static Queue<Referee> referees = new Queue<Referee>();
 
         
         public bool Available()
