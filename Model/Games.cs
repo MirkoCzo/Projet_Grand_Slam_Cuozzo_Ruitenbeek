@@ -16,8 +16,12 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
         private int id_set;
         public int gameNumber;
         public int getId() { return id; }
-        public int getScoreOpOne() { return scoreOp1; }
-        public int getScoreOpTwo() { return scoreOp2; }
+        public List<int> getScoreOpOne() { return score_Op_One; }
+        public List<int> getScoreOpTwo() { return score_Op_Two; }
+
+        public int getScoreOp1() { return scoreOp1; }
+        public int getScoreOp2() { return scoreOp2; }
+
         public int getIdSet() { return id_set; }
         public int getGameNumber() { return gameNumber; }
 
@@ -121,27 +125,42 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
         // Gestion des égalités (40-40)
         private void HandleDeuce(ref int player1Points, ref int player2Points)
         {
-            bool player1WinsPoint = new Random().Next(2) == 0;
-
-            if (player1WinsPoint)
+            while (!IsHandleDeuceFinished(player1Points, player2Points))
             {
-                score_Op_One.Add(player1Points++);
-                score_Op_Two.Add(player2Points);
-            }
-            else
-            {
-                score_Op_One.Add(player2Points++);
-                score_Op_One.Add(player1Points);
+                bool player1WinsPoint = new Random().Next(2) == 0;
 
-                if (player1Points == 4 && player2Points == 4)
+                if (player1WinsPoint)
                 {
-                    // Retour à l'égalité en cas de perte de l'avantage
+                    //Console.WriteLine("Point gagné joueur 1");
+                    player1Points++;
+                    score_Op_One.Add(player1Points);
+                    score_Op_Two.Add(player2Points);
+                    //DisplayCurrentScore(player1Points, player2Points);
+                }
+                else
+                {
+                    //Console.WriteLine("Point gagné joueur 2");
+                    player2Points++;
+                    score_Op_One.Add(player2Points);
+                    score_Op_Two.Add(player1Points);
+                    //DisplayCurrentScore(player1Points, player2Points);
+
+                }
+                if (Math.Abs(player1Points - player2Points) == 0 && player1Points >= 4)
+                {
+                    //Console.WriteLine("Perte d'avantage retour à l'égalité");
                     player1Points = 3;
                     player2Points = 3;
                     score_Op_One.Add(player1Points);
                     score_Op_Two.Add(player2Points);
+                    //DisplayCurrentScore(player1Points, player2Points);
                 }
             }
+            //Console.WriteLine("Sortie HandleDeuce");
+        }
+        private bool IsHandleDeuceFinished(int player1Points, int player2Points)
+        {
+            return (player1Points >= 5 && player1Points - player2Points >= 2) || (player2Points >= 5 && player2Points - player1Points >= 2);
         }
 
     }

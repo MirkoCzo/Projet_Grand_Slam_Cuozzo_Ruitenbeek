@@ -21,6 +21,9 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
         private List<Games> games;
         private Opponents winner;
         private GamesDAO gamesDAO;
+        private Match match;
+        bool isTieBreakPlayed = false;
+        bool isSuperTieBreakPlayed = false;
 
         public Set(int id,int idMatch)
         {
@@ -111,41 +114,50 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
 
         public void Play()
         {
+            //Match match = getMatch(this.id_match);
             int gameNumber = 0;
-            Match match = getMatch(this.id_match);
-            Schedule.ScheduleType type = GetTypeMatch(match);
-            while (!CheckIfSetIsFinished(scoreOp1, scoreOp2, match))
+            Schedule.ScheduleType type = GetTypeMatch(this.match); // Utilisez l'objet match fourni
+            games = new List<Games>();
+            while (!CheckIfSetIsFinished(scoreOp1, scoreOp2, match) && !isTieBreakPlayed && !isSuperTieBreakPlayed)
             {
                 Games game = new Games(this.id, gameNumber);
                 gameNumber++;
-                if(gameNumber>=12 && (scoreOp1 == 6 && scoreOp2 == 6))
+                Console.WriteLine("Jeu joué: " + gameNumber);
+                if (ShouldPlayTieBreak(gameNumber))
                 {
-                    if(setNumber == 3 ||setNumber == 5)
+                    if (setNumber == 3 || setNumber == 5)
                     {
                         if (type == Schedule.ScheduleType.GentlemenSingle && setNumber == 5)
                         {
+                            Console.WriteLine("playing supertie");
                             SuperTieBreak superTieBreak = new SuperTieBreak(this.id, gameNumber);
                             superTieBreak.PlaySuperTieBreak();
                             UpdateSets(superTieBreak);
+                            isSuperTieBreakPlayed = true;
                         }
                         else if (type != Schedule.ScheduleType.GentlemenSingle && setNumber == 3)
                         {
+                            Console.WriteLine("playing supertie");
                             SuperTieBreak superTieBreak = new SuperTieBreak(this.id, gameNumber);
                             superTieBreak.PlaySuperTieBreak();
                             UpdateSets(superTieBreak);
+                            isSuperTieBreakPlayed = true;
                         }
                     }
                     else
                     {
+                        Console.WriteLine("playing tie break");
                         game.PlayTieBreak();
                         UpdateSets(game);
+                        isTieBreakPlayed = true;
                     }
-                   
+
                 }
                 else
                 {
                     game.PlayGame();
                     UpdateSets(game);
+
                 }
                 game.setGameNumber(gameNumber);
                 game.setIdSet(this.id);
@@ -153,16 +165,12 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
                 game.setId(id);
                 games.Add(game);
             }
-            if (scoreOp1 > scoreOp2)
-            {
-                winner = match.getOpponents1();
-            }
-            else
-            {
-                winner = match.getOpponents2();
-            }
 
 
+        }
+        private bool ShouldPlayTieBreak(int gameNumber)
+        {
+            return gameNumber >= 12 && scoreOp1 == 6 && scoreOp2 == 6;
         }
         private bool CheckIfSetIsFinished(int ScoreOp1, int ScoreOp2, Match match)
         {
