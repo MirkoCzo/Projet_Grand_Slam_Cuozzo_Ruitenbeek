@@ -116,7 +116,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                     while (reader.Read()) 
                     {
                         Referee referee = new Referee();
-                        referee.setId(referee.getId());
+                        referee.setId(reader.GetInt32(0));
                         referee.setFirstname(reader.GetString(1));
                         referee.setLastname(reader.GetString(2));
                         referee.setNationality(reader.GetString(3));
