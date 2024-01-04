@@ -21,6 +21,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
         private List<Games> games;
         private Opponents winner;
         private GamesDAO gamesDAO;
+        private MatchDAO matchDAO = new MatchDAO();
         private Match match;
         bool isTieBreakPlayed = false;
         bool isSuperTieBreakPlayed = false;
@@ -114,7 +115,6 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
 
         public void Play()
         {
-            //Match match = getMatch(this.id_match);
             int gameNumber = 0;
             Schedule.ScheduleType type = GetTypeMatch(this.match); // Utilisez l'objet match fourni
             games = new List<Games>();
@@ -179,6 +179,17 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
             //int numberWinningSets = GetNbWinningSets(type);
             return (ScoreOp1 >= 6 && ScoreOp1 - ScoreOp2 >= 2) || (ScoreOp2 >= 6 && ScoreOp2 - ScoreOp1 >= 2);
         }
+        public Opponents GetWinner()
+        {
+            if (scoreOp1 > scoreOp2)
+            {
+                return(matchDAO.Find(this.id_match)).getOpponents1();
+            }
+            else
+            {
+               return(matchDAO.Find(this.id_match)).getOpponents2();
+            }
+        }
 
         private bool CheckIfSuperTieBreak()
         {
@@ -230,11 +241,6 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), "Type invalide."); 
             }
-        }
-        private int GetNbWinningSets(Schedule.ScheduleType scheduleType)
-        {
-            Schedule schedule = new Schedule(scheduleType);
-            return schedule.NbWinningSets();
         }
         private Opponents getWinner()
         {
