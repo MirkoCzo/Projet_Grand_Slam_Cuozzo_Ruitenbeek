@@ -38,7 +38,23 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             GenerateSchedules();
             foreach (Schedule s in scheduleList)
             {
-                s.PlayNextRound();
+                if(s.GetType() == ScheduleType.GentlemenSingle || s.GetType() == ScheduleType.LadiesSingle)
+                {
+                    for (int i = 0; i < 7; i++)
+                    {
+                        s.PlayNextRound();
+                    }
+                    
+                }
+                else
+                {
+                    for (int i = 0; i < 6; i++)
+                    {
+                        s.PlayNextRound();
+
+                    }
+                }
+              
             }
         }
         public void GenerateSchedules()//1

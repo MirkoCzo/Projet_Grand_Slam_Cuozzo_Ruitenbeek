@@ -32,24 +32,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             this.actualRound = 0;
             this.matcheList = new Queue<Match>();
         }
-        public int NbWinningSets()
-        {
-            switch (scheduleType)
-            {
-                case ScheduleType.GentlemenSingle:
-                    return 3; // 3 sets gagnants pour les programmes simples
-                case ScheduleType.LadiesSingle:
-                    return 2; // 2 sets gagnants pour les programmes simples
-                case ScheduleType.GentlemenDouble:
-                    return 2; // 2 sets gagnants pour les programmes doubles
-                case ScheduleType.LadiesDouble:
-                    return 2; // 2 sets gagnants pour les programmes doubles
-                case ScheduleType.MixedDouble:
-                    return 2; // 2 sets gagnants pour les programmes doubles
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
+      
         public async void PlayNextRound() {
             int matchesPlayed = 0;
             DateTime currentDate = Tournament.date;
@@ -93,11 +76,11 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                     {
                         m.setId(matchId);
                     }
-                    await m.Play();
+                    Opponents winner = await m.Play();
                     matcheList.Enqueue(m);
                     Tournament.courtsList.Enqueue(court);
                     Tournament.refereesList.Enqueue(referee);
-                    winners.Add(m.GetWinner());
+                    winners.Add(winner);
                     matchesPlayed++;
                 }                           
             }
@@ -246,6 +229,26 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             {
                 queue.Enqueue(item);
             }
+        }
+        public static int GetNbWinningSets(int type)
+        {
+            switch (type)
+            {
+                case 1:
+                    return 3; // 3 sets gagnants pour les programmes simples
+                case 2:
+                    return 2; // 2 sets gagnants pour les programmes simples
+                case 3:
+                    return 2; // 2 sets gagnants pour les programmes simples
+                case 4:
+                    return 2; // 2 sets gagnants pour les programmes doubles
+                case 5:
+                    return 2; // 2 sets gagnants pour les programmes doubles
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+        }
         }
     }
 }

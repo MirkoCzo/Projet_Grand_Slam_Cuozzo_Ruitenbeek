@@ -1,4 +1,5 @@
-﻿using Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model;
+﻿using Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO;
+using Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,8 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         private Court court;
         private List<Set> sets;
         private int id_Tournament;
+        private SetDAO setDAO = new SetDAO();
+        
 
 
         public Opponents GetWinner()
@@ -30,10 +33,37 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
 
         public async Task<Opponents> Play()
         {
-            Set set = new Set(this.id);
-            set.Play();
-            if(set.)
-            return GetWinner();
+            int ScoreOp1 = 0;
+            int ScoreOp2 = 0;
+            int setNumber = 1;
+            while (!CheckIfMatchIsFinished(ScoreOp1, ScoreOp2, this.type))
+            {
+                Set set = new Set(this.id);
+                set.Play();
+                if (set.GetWinner().Id == this.opponents1.Id)
+                {
+                    ScoreOp1++;
+                }
+                else
+                {
+                    ScoreOp2++;
+                }
+                set.setSetNumber(setNumber);
+                setNumber++;
+                int id = setDAO.Create(set);
+                set.setId(id);   
+                sets.Add(set);
+            }
+            if (ScoreOp1 > ScoreOp2)
+            {
+                return this.opponents1;
+            }
+            else
+            {
+                return this.opponents2;
+            }
+            
+            
         }
         public int getId()
         {
@@ -123,7 +153,11 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         {
             this.type = type;
         }
-        
 
+        private bool CheckIfMatchIsFinished(int ScoreOp1, int ScoreOp2, int type)
+        {                    
+            int numberWinningSets = Schedule.GetNbWinningSets(this.type);
+            return (ScoreOp1 >= numberWinningSets) || (ScoreOp2 >= numberWinningSets);
+        }
     }
 }
