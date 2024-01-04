@@ -28,11 +28,25 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             Tournament.date = date;
             FillList();
         }
+        public Tournament(int id,string name)
+        {
+            Tournament.id=id;
+            this.name = name;
+        }
         public Tournament()
         {
           
         }
-        
+        public int getId() { return id; }
+
+        public string getName() { return name; }
+
+        public void setId(int id) { Tournament.id = id; }
+
+        public void setName(string name) { this.name = name; }
+
+        public List<Schedule> GetSchedules() { return scheduleList; }
+
         public void Play()
         {
             GenerateSchedules();
@@ -94,14 +108,6 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             Tournament.refereesList = tmp2;
         }
         
-        public int getId() { return id; }
-
-        public string getName() { return name; }
-
-        public void setId(int id) { this.id = id; }
-
-        public void setName(string name) { this.name = name; }
-
-        public List<Schedule> GetSchedules() { return scheduleList; }
+       
     }
 }
