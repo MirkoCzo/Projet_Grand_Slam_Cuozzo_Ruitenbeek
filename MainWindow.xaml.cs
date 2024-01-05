@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,24 +26,47 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             InitializeComponent();
         }
 
+        // MainWindow.xaml.cs
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Tournament t = new Tournament(1, "test");
-            t.Play();
+            Tournament t = new Tournament("TestTournoi", new DateTime(2024, 1, 1));
+            t.GenerateSchedules();
 
-           
-            textBlockOpponents.Text = "";
-
+            int i = 0;
             foreach (Schedule s in t.GetSchedules())
             {
-                foreach (Match m in s.getMatchsList())
+               
+                int x = 1;
+                string scheduleDetails = "";
+                string matchs = "";
+
+                foreach (Opponents op in s.GetOpponentsList())
                 {
-                    // Ajoutez les adversaires à la TextBlock
-                    textBlockOpponents.Text += $"Opponents 1: {m.getOpponents1()}\n";
-                    textBlockOpponents.Text += $"Opponents 2: {m.getOpponents2()}\n";
-                    textBlockOpponents.Text += "--------------------------------\n";
+                    if (op.Player2 != null)
+                    {
+                        scheduleDetails += $"{x}-{op.Player2.getFirstname()}-{op.Player1.getFirstname()} id : {op.Id}\n";
+                    }
+                    else
+                    {
+                        scheduleDetails += $"{x}-{op.Player1.getFirstname()} id : {op.Id}\n";
+                    }
+                    x++;
                 }
+                int count = s.GetOpponentsList().Count / 2;
+                List<Match> list = s.GenerateMatches(count);
+                Tournament.date = list.Last().getDate().AddDays(1);
+                ScheduleWindow scheduleWindow = new ScheduleWindow();
+                scheduleWindow.Title = $"Détails du planning {i}";
+                foreach (Match m in list)
+                {
+                    scheduleWindow.ComboBoxMatches.Items.Add($"Match {m.getId()}{m.getOpponents1().Player1.getLastname()} vs {m.getOpponents2().Player1.getLastname()} à {m.getDate()}/n");
+                }
+                scheduleWindow.Show();
+
+
+                i++;
             }
         }
+
     }
 }

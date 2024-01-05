@@ -33,12 +33,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             }
             else isAvailable = true;
         }
-        public void FillList()
-        {
-            RefereeDAO refereeDAO = new RefereeDAO();
-            Queue<Referee> tmp =  new Queue<Referee>(refereeDAO.FindAll());
-            Referee.referees = tmp;
-        }
+        
          
     }
 }

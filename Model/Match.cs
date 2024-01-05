@@ -23,12 +23,21 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         private List<Set> sets;
         private int id_Tournament;
         private SetDAO setDAO = new SetDAO();
-        
-
-
-        public Opponents GetWinner()
+        public Match(DateTime date, int duration, int round, int type, Opponents opponents1, Opponents opponents2, Referee referee, Court court, int id_Tournament)
         {
-            return this.GetWinner();
+            this.date = date;
+            this.duration = duration;
+            this.round = round;
+            this.type = type;
+            this.opponents1 = opponents1;
+            this.opponents2 = opponents2;
+            this.referee = referee;
+            this.court = court;
+            this.id_Tournament = id_Tournament;
+        }
+        public Match()
+        {
+
         }
 
         public async Task<Opponents> Play()
@@ -51,10 +60,24 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                 set.setSetNumber(setNumber);
                 setNumber++;
                 int id = setDAO.Create(set);
-                set.setId(id);   
-                sets.Add(set);
+                if(id != -1)
+                {
+                    set.setId(id);
+                    sets.Add(set);
+                }
+                else
+                {
+                    throw new Exception("Erreur lors de la création du set");
+                }
+                
             }
-            if (ScoreOp1 > ScoreOp2)
+            return WhoWin(ScoreOp1, ScoreOp2);
+            
+            
+        }
+        private Opponents WhoWin(int countOp1, int countOp2)
+        {
+            if (countOp1 > countOp2)
             {
                 return this.opponents1;
             }
@@ -62,9 +85,13 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             {
                 return this.opponents2;
             }
-            
-            
         }
+        private bool CheckIfMatchIsFinished(int ScoreOp1, int ScoreOp2, int type)
+        {
+            int numberWinningSets = Schedule.GetNbWinningSets(this.type);
+            return (ScoreOp1 >= numberWinningSets) || (ScoreOp2 >= numberWinningSets);
+        }
+        //Getter Setter
         public int getId()
         {
             return id;
@@ -154,10 +181,6 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             this.type = type;
         }
 
-        private bool CheckIfMatchIsFinished(int ScoreOp1, int ScoreOp2, int type)
-        {                    
-            int numberWinningSets = Schedule.GetNbWinningSets(this.type);
-            return (ScoreOp1 >= numberWinningSets) || (ScoreOp2 >= numberWinningSets);
-        }
+        
     }
 }

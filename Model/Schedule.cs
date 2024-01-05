@@ -21,88 +21,138 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         }
         private ScheduleType scheduleType;
         private int actualRound;
-        private Queue<Match> matcheList;
+        private List<Match> matcheList;
         private Queue<Opponents> opponentsList;
         OpponentsDAO opponentsDAO = new OpponentsDAO();
         MatchDAO matchDAO = new MatchDAO();
+        int matchPlayed = 0;
+        DateTime currentDate = Tournament.date;
 
         public Schedule(ScheduleType scheduleType)
         {
             this.scheduleType = scheduleType;
             this.actualRound = 0;
-            this.matcheList = new Queue<Match>();
+            this.matcheList = new List<Match>();
         }
       
-        public async void PlayNextRound() {
-            int matchesPlayed = 0;
-            DateTime currentDate = Tournament.date;
-            int matchesCount = opponentsList.Count/2;
+        
+        //Jouer un tour du schedule
+        public async void PlayNextRound()
+        {
+            int matchesCount = opponentsList.Count / 2;
+            List<Match> matches = GenerateMatches(matchesCount);
             List<Opponents> winners = new List<Opponents>();
-            for(int i = 0; i < matchesCount;  i++)
+            Court court;
+            Referee referee;
+            foreach (Match match in matches)
             {
-                if(Tournament.courtsList.Count == 0 || Tournament.refereesList.Count == 0)
+                
+                while (!TryAssignCourtAndReferee(out court, out  referee))
                 {
-                    matchesCount--;
+                    await Task.Delay(1000);
+                }
+                
+                match.setCourt(court);
+                match.setReferee(referee);
+                matchDAO.Update(match);
+
+                Opponents winner = await match.Play();
+                winners.Add(winner);
+                this.matchPlayed++;
+                
+                Tournament.courtsList.Enqueue(court);
+                Tournament.refereesList.Enqueue(referee);
+            }
+            Tournament.date = this.currentDate;
+            opponentsList = new Queue<Opponents>(winners);
+            this.actualRound++;
+        }
+        
+
+        //Générer les match (Horraire-Adversaire)
+        public List<Match> GenerateMatches(int count)
+        {
+            List<Match> matches = new List<Match>();
+
+            for (int i = 0; i < count; i++)
+            {
+                Opponents op1 = opponentsList.Dequeue();
+                Opponents op2 = opponentsList.Dequeue();
+                DateTime currentDate = SetMatchDate();
+
+                Match m = CreateMatch(op1, op2, currentDate);
+                
+
+                if (m != null)
+                {
+                    matches.Add(m);
                 }
                 else
                 {
-                    //Set up Opponents 
-                    Opponents op1 = opponentsList.Dequeue();
-                    Opponents op2 = opponentsList.Dequeue();
-                    Match m = new Match();
-                    m.setType((int)scheduleType);
-                    m.setId_Tournament(Tournament.id);
-                    m.setOpponents1(op1);
-                    m.setOpponents2(op2);
-                    //Set up Date
-                    if (matchesPlayed % 30 == 0)
-                    {
-                        currentDate = currentDate.AddDays(1);
-                        currentDate = currentDate.Date.AddHours(10);
-                    }
-                    else
-                    {
-                        currentDate.AddHours(4);
-                    }
-                    m.setDate(currentDate);
-                    //Set up Court-Referee
-                    Court court = Tournament.courtsList.Dequeue();
-                    Referee referee = Tournament.refereesList.Dequeue();
-                    m.setReferee(referee);
-                    m.setCourt(court);
-                    m.setRound(actualRound);
-                    int matchId = matchDAO.Create(m);
-                    if (matchId != -1)
-                    {
-                        m.setId(matchId);
-                    }
-                    Opponents winner = await m.Play();
-                    matcheList.Enqueue(m);
-                    Tournament.courtsList.Enqueue(court);
-                    Tournament.refereesList.Enqueue(referee);
-                    winners.Add(winner);
-                    matchesPlayed++;
-                }                           
+                    throw new Exception("Erreur lors de la création du match");
+                }
             }
-            opponentsList = new Queue<Opponents>(winners);
-            Tournament.date = currentDate;
-            this.actualRound++;
+            this.matcheList.AddRange(matches);
+            return matches;
+            
         }
-        public Player GetWinner()
+        //Set les dates des matchs
+        private DateTime SetMatchDate()
         {
-            return this.GetWinner();
+            DateTime currentDate = this.currentDate;
+
+            if (this.matchPlayed % 30 == 0)
+            {
+                currentDate = currentDate.AddDays(1);
+                currentDate = currentDate.Date.AddHours(10);
+            }
+            else if (this.matchPlayed % 10 == 0)
+            {
+                currentDate = currentDate.AddHours(4);
+            }
+            else
+            {
+                currentDate = currentDate.AddHours(0); // Aucun changement d'heure pour les 10 premiers matchs
+            }
+
+            this.matchPlayed++;
+            this.currentDate = currentDate;
+            return currentDate;
         }
-        public ScheduleType GetType()
+        //Save les matchs
+        private Match CreateMatch(Opponents op1, Opponents op2, DateTime currentDate)
         {
-            return scheduleType;
+            Match m = new Match(currentDate, 0, actualRound, (int)scheduleType, op1, op2, null, null, Tournament.id);
+            int matchId = matchDAO.Create(m);
+
+            if (matchId != -1)
+            {
+                m.setId(matchId);
+                return m;
+            }
+            else
+            {
+                return null;
+            }
         }
-        public int GetActualRound()
+        //Trouver un arbitre et un court
+        private bool TryAssignCourtAndReferee(out Court court, out Referee referee)
         {
-            return actualRound;
+            while (Tournament.courtsList.Count > 0 && Tournament.refereesList.Count > 0)
+            {
+                court = Tournament.courtsList.Dequeue();
+                referee = Tournament.refereesList.Dequeue();
+                return true;
+            }
+
+            court = null;
+            referee = null;
+            return false;
         }
-       
+
+        //Remplissage schedule
         public void Fill(List<Player> men, List<Player> women)
-        {
+               {
             if (this.scheduleType == ScheduleType.GentlemenSingle || this.scheduleType == ScheduleType.LadiesSingle)
             {
                 if (this.scheduleType == ScheduleType.GentlemenSingle)
@@ -193,10 +243,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
 
         }
         
-        public Queue<Match> getMatchsList()
-        {
-            return matcheList;
-        }
+        //Methodes utiles
 
         static List<T> MixList<T>(List<T> liste1, List<T> liste2, int taille)
         {
@@ -230,25 +277,132 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                 queue.Enqueue(item);
             }
         }
+        public static bool CheckIfScheduleIsFinished(int actualRound, int type)
+        {
+            if (actualRound == GetNbRound(type))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public static int GetNbRound(int type)
+        {
+            switch (type)
+            {
+                case 0:
+                    return 7; // 7 tours pour les programmes simples
+                case 1:
+                    return 7; // 7 tours pour les programmes simples
+                case 2:
+                    return 7; // 7 tours pour les programmes simples
+                case 3:
+                    return 6; // 6 tours pour les programmes doubles
+                case 4:
+                    return 6; // 6 tours pour les programmes doubles
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
         public static int GetNbWinningSets(int type)
         {
             switch (type)
             {
-                case 1:
+                case 0:
                     return 3; // 3 sets gagnants pour les programmes simples
+                case 1:
+                    return 2; // 2 sets gagnants pour les programmes simples
                 case 2:
                     return 2; // 2 sets gagnants pour les programmes simples
                 case 3:
-                    return 2; // 2 sets gagnants pour les programmes simples
-                case 4:
                     return 2; // 2 sets gagnants pour les programmes doubles
-                case 5:
+                case 4:
                     return 2; // 2 sets gagnants pour les programmes doubles
                 default:
                     throw new ArgumentOutOfRangeException();
             }
 
         }
+        //Getter Setter
+        public Queue<Opponents> GetOpponentsList()
+        {
+            return opponentsList;
         }
+        public Player GetWinner()
+        {
+            return this.GetWinner();
+        }
+        public ScheduleType GetType()
+        {
+            return scheduleType;
+        }
+        public int GetActualRound()
+        {
+            return actualRound;
+        }
+        
+        /*
+        public async void PlayNextRoundV1()
+        {
+            int matchesPlayed = 0;
+            DateTime currentDate = Tournament.date;
+            int matchesCount = opponentsList.Count / 2;
+            List<Opponents> winners = new List<Opponents>();
+            for (int i = 0; i < matchesCount; i++)
+            {
+                if (Tournament.courtsList.Count == 0 || Tournament.refereesList.Count == 0)
+                {
+                    matchesCount--;
+                }
+                else
+                {
+                    //Set up Opponents 
+                    Opponents op1 = opponentsList.Dequeue();
+                    Opponents op2 = opponentsList.Dequeue();
+
+                    //Set up Date
+                    if (matchesPlayed % 30 == 0)
+                    {
+                        currentDate = currentDate.AddDays(1);
+                        currentDate = currentDate.Date.AddHours(10);
+                    }
+                    else
+                    {
+                        currentDate.AddHours(4);
+                    }
+
+                    //Set up Court-Referee
+                    Court court = Tournament.courtsList.Dequeue();
+                    Referee referee = Tournament.refereesList.Dequeue();
+
+                    //On crée le match
+                    Match m = new Match(currentDate, 0, actualRound, (int)scheduleType, op1, op2, referee, court, Tournament.id);
+                    int matchId = matchDAO.Create(m);
+                    if (matchId != -1)
+                    {
+                        m.setId(matchId);
+                    }
+                    //On joue le match
+                    Opponents winner = await m.Play();
+                    //On sauve le match
+                    matcheList.Enqueue(m);
+                    //On libere le court/arbitre
+                    Tournament.courtsList.Enqueue(court);
+                    Tournament.refereesList.Enqueue(referee);
+                    //On sauve l'opponent gagnant
+                    winners.Add(winner);
+
+                    matchesPlayed++;
+                }
+            }
+            opponentsList = new Queue<Opponents>(winners);
+            Tournament.date = currentDate;
+            this.actualRound++;
+        }
+        */
     }
+}
 

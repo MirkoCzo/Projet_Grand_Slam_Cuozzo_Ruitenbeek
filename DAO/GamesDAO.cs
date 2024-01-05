@@ -17,7 +17,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    SqlCommand cmd = new SqlCommand($"INSERT INTO dbo.Games (Game_Number,Score_Op_One,Score_Op_Two,Id_Set) VALUES (@GameNumber, @ScoreOne, @ScoreTwo, @Id_Set)", connection);
+                    SqlCommand cmd = new SqlCommand($"INSERT INTO dbo.Games (Game_Number,Score_Op_One,Score_Op_Two,Id_Set) OUTPUT INSERTED.Id_Game VALUES (@GameNumber, @ScoreOne, @ScoreTwo, @Id_Set)", connection);
                     cmd.Parameters.AddWithValue("GameNumber", obj.getGameNumber());
                     cmd.Parameters.AddWithValue("ScoreOne",obj.getScoreOp1());
                     cmd.Parameters.AddWithValue("ScoreTwo", obj.getScoreOp2());
