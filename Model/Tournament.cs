@@ -20,6 +20,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         public static Queue<Referee> refereesList;
         public static DateTime date;
         private List<Schedule> scheduleList;
+        private TournamentDAO tournamentDAO = new TournamentDAO();
 
         public Tournament(int id, string name, DateTime date)
         {
@@ -36,6 +37,13 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         public Tournament()
         {
           
+        }
+        public Tournament(string name, DateTime date)
+        {
+            this.name = name;
+            Tournament.date = date;
+            int id = tournamentDAO.Create(this);
+            Tournament.id = id;
         }
         public int getId() { return id; }
 

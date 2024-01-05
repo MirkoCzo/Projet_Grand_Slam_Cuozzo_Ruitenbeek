@@ -20,7 +20,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
             {
                 using(SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    SqlCommand cmd = new SqlCommand($"INSERT INTO dbo.Match(Date,Duration,Round,Type,Id_Opponent_1,Id_Opponent_2,Id_Tournament,Id_Court,Id_Ref) VALUES(@Date,@Duration,@Roud,@Type,@Id_Opponent_1,@Id_Opponent_2,@Id_Tournament,@Id_Court,@Id_Ref)", connection);
+                    SqlCommand cmd = new SqlCommand($"INSERT INTO dbo.Match(Date,Duration,Round,Type,Id_Opponent_1,Id_Opponent_2,Id_Tournament,Id_Court,Id_Ref) OUTPUT INSERTED.Id_Match VALUES(@Date,@Duration,@Round,@Type,@Id_Opponent_1,@Id_Opponent_2,@Id_Tournament,@Id_Court,@Id_Ref)", connection);
                     cmd.Parameters.AddWithValue("Date", obj.getDate());
                     cmd.Parameters.AddWithValue("Duration", obj.getDuration());
                     cmd.Parameters.AddWithValue("Round", obj.getRound());
@@ -28,8 +28,8 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                     cmd.Parameters.AddWithValue("Id_Opponent_1", obj.getOpponents1().Id);
                     cmd.Parameters.AddWithValue("Id_Opponent_2", obj.getOpponents2().Id);
                     cmd.Parameters.AddWithValue("Id_Tournament", obj.getId_Tournament());
-                    cmd.Parameters.AddWithValue("Id_Court", obj.getCourt().getId());
-                    cmd.Parameters.AddWithValue("Id_Ref", obj.getReferee().getId());
+                    cmd.Parameters.AddWithValue("Id_Court", obj.getCourt()?.getId() ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("Id_Ref", obj.getReferee()?.getId() ?? (object)DBNull.Value);
                     connection.Open();
                     res = Convert.ToInt32(cmd.ExecuteScalar());
                 }

@@ -35,101 +35,30 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
         {
             this.id_match = idMatch;
         }
+        public Set()
+        {
 
-        public int getId()
-        {
-            return id;
-        }
-        public int getScoreOp1()
-        {
-            return scoreOp1;
-        }
-        public int getScoreOp2()
-        {
-            return scoreOp2;
-        }
-        public int getSetNumber()
-        {
-            return setNumber;
-        }
-        public void setId(int id)
-        {
-            this.id = id;
-        }
-        public void setScoreOp1(int scoreOp1)
-        {
-            this.scoreOp1 = scoreOp1;
-        }
-        public void setScoreOp2(int scoreOp2)
-        {
-            this.scoreOp2 = scoreOp2;
-        }
-        public void setSetNumber(int setNumber)
-        {
-            this.setNumber = setNumber;
-        }
-        public int getId_match()
-        {
-            return id_match;
-        }
-        public void setId_match(int id_match)
-        {
-            this.id_match = id_match;
         }
 
-        public void setIsFinished(bool finished)
-        {
-            this.isFinished = finished;
-        }
-
-        public bool getIsFinished()
-        {
-            return isFinished;
-        }
-
-        public void setIsTieBreak(bool isSuperTieBreak)
-        {
-            this.isSuperTieBreak = isSuperTieBreak;
-        }
-
-        public bool getIsTieBreak()
-        {
-            return isSuperTieBreak;
-        }
-
-        public void setGames(List<Games> setGames)
-        {
-            this.games = setGames;
-        }
-        public Match getMatch(int id)
-        {
-            MatchDAO matchDAO = new MatchDAO();
-            Match match = matchDAO.Find(id);
-            return match;
-        }
-
-        public List<Games> getGames()
-        {
-            return this.games;
-        }
+        
 
         public void Play()
         {
-            int gameNumber = 0;
+            int gameNumber = 1;
             Schedule.ScheduleType type = GetTypeMatch(this.match); // Utilisez l'objet match fourni
             games = new List<Games>();
             while (!CheckIfSetIsFinished(scoreOp1, scoreOp2, match) && !isTieBreakPlayed && !isSuperTieBreakPlayed)
             {
                 Games game = new Games(this.id, gameNumber);
                 gameNumber++;
-                Console.WriteLine("Jeu joué: " + gameNumber);
+                
                 if (ShouldPlayTieBreak(gameNumber))
                 {
                     if (setNumber == 3 || setNumber == 5)
                     {
                         if (type == Schedule.ScheduleType.GentlemenSingle && setNumber == 5)
                         {
-                            Console.WriteLine("playing supertie");
+                            //Super Tie break Homme
                             SuperTieBreak superTieBreak = new SuperTieBreak(this.id, gameNumber);
                             superTieBreak.PlaySuperTieBreak();
                             UpdateSets(superTieBreak);
@@ -137,7 +66,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
                         }
                         else if (type != Schedule.ScheduleType.GentlemenSingle && setNumber == 3)
                         {
-                            Console.WriteLine("playing supertie");
+                            //Super Tie break Autre
                             SuperTieBreak superTieBreak = new SuperTieBreak(this.id, gameNumber);
                             superTieBreak.PlaySuperTieBreak();
                             UpdateSets(superTieBreak);
@@ -146,7 +75,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
                     }
                     else
                     {
-                        Console.WriteLine("playing tie break");
+                        //Tie break normal
                         game.PlayTieBreak();
                         UpdateSets(game);
                         isTieBreakPlayed = true;
@@ -155,15 +84,27 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
                 }
                 else
                 {
+                    //Jeu normal
                     game.PlayGame();
                     UpdateSets(game);
 
                 }
+                //Sauve le jeu
                 game.setGameNumber(gameNumber);
                 game.setIdSet(this.id);
                 int id = gamesDAO.Create(game);
-                game.setId(id);
-                games.Add(game);
+                if (id != -1) 
+                {
+                    game.setId(id);
+                    games.Add(game);
+
+                }
+                else
+                {
+                    throw new Exception("Erreur lors de la création du jeu");
+                }
+
+                
             }
 
 
@@ -242,9 +183,84 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
                     throw new ArgumentOutOfRangeException(nameof(type), "Type invalide."); 
             }
         }
-        private Opponents getWinner()
+        //Getter Setter
+        public int getId()
         {
-            return this.winner;
+            return id;
         }
+        public int getScoreOp1()
+        {
+            return scoreOp1;
+        }
+        public int getScoreOp2()
+        {
+            return scoreOp2;
+        }
+        public int getSetNumber()
+        {
+            return setNumber;
+        }
+        public void setId(int id)
+        {
+            this.id = id;
+        }
+        public void setScoreOp1(int scoreOp1)
+        {
+            this.scoreOp1 = scoreOp1;
+        }
+        public void setScoreOp2(int scoreOp2)
+        {
+            this.scoreOp2 = scoreOp2;
+        }
+        public void setSetNumber(int setNumber)
+        {
+            this.setNumber = setNumber;
+        }
+        public int getId_match()
+        {
+            return id_match;
+        }
+        public void setId_match(int id_match)
+        {
+            this.id_match = id_match;
+        }
+
+        public void setIsFinished(bool finished)
+        {
+            this.isFinished = finished;
+        }
+
+        public bool getIsFinished()
+        {
+            return isFinished;
+        }
+
+        public void setIsTieBreak(bool isSuperTieBreak)
+        {
+            this.isSuperTieBreak = isSuperTieBreak;
+        }
+
+        public bool getIsTieBreak()
+        {
+            return isSuperTieBreak;
+        }
+
+        public void setGames(List<Games> setGames)
+        {
+            this.games = setGames;
+        }
+        public Match getMatch(int id)
+        {
+            MatchDAO matchDAO = new MatchDAO();
+            Match match = matchDAO.Find(id);
+            return match;
+        }
+
+        public List<Games> getGames()
+        {
+            return this.games;
+        }
+
+
     }
 }
