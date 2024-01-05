@@ -35,6 +35,10 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
         {
             this.id_match = idMatch;
         }
+        public Set()
+        {
+
+        }
 
         public int getId()
         {
