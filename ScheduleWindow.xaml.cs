@@ -19,6 +19,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
     /// </summary>
     public partial class ScheduleWindow : Window
     {
+        
 
         public ScheduleWindow()
         {
@@ -26,9 +27,15 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             
             
         }
-        public Grid ScheduleGrid
+        
+        public ItemsControl MatchItemControl
         {
-            get { return scheduleGrid; }
+            get { return matchesItemsControl; }
+        }
+        public string TitleText
+        {
+            get { return scheduleTitleTextBlock.Text; }
+            set { scheduleTitleTextBlock.Text = value; }
         }
 
 

@@ -83,34 +83,120 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         private void AfficherAvancement()
         {
             List<Schedule> scheduleList = this.t.GetSchedules();
-
             foreach (Schedule s in scheduleList)
             {
-                int numOfMatchPlayed = s.GetMatchPlayed();
+                List<MatchInfo> matchInfos = new List<MatchInfo>();
                 ScheduleWindow scheduleWindow = new ScheduleWindow();
-
-                for (int i = 0; i < numOfMatchPlayed; i++)
+                string type = Schedule.GetScheduleString(s.GetType());
+                foreach (Match m in s.GetMatches())
                 {
-                    TextBlock matchTextBlock = new TextBlock
+                    DateTime date = m.getDate();
+                    int round = m.getRound();
+                    string win;
+                    string loose;
+                    int scoreWin = m.getScoreWinner();
+                    int scoreLoose = m.getScoreLooser();
+                    if (s.GetType() == Schedule.ScheduleType.GentlemenSingle || s.GetType() == Schedule.ScheduleType.LadiesSingle)
                     {
-                        Text = $"Match {i + 1}",
-                        HorizontalAlignment = HorizontalAlignment.Center,
-                        VerticalAlignment = VerticalAlignment.Center,
-                        FontWeight = FontWeights.Bold,
-                        FontSize = 12
-                    };
+                        Player p1 = m.getOpponents1().Player1;
+                        Player p2 = m.getOpponents2().Player1;
+                        Opponents winner = m.getWinner();
+                        Player w = winner.Player1;
+                        if (w.getLastname().Equals(p1.getLastname()))
+                        {
+                            win = $" {p1.getLastname()} {p1.getFirstname()}";
+                            loose = $" {p2.getLastname()} {p2.getFirstname()}";
+                        }
+                        else
+                        {
+                            loose = $" {p1.getLastname()} {p1.getFirstname()}";
+                            win = $" {p2.getLastname()} {p2.getFirstname()}";
 
-                    // Ajoutez le TextBlock à la grille
-                    scheduleWindow.ScheduleGrid.Children.Add(matchTextBlock);
+                        }                       
+                        MatchInfo matchInfo = new MatchInfo(date,GetRoundSingle(round),loose,win,scoreWin,scoreLoose);
+                        matchInfos.Add(matchInfo);
+                    }
+                    else
+                    {
+                        Player p1 = m.getOpponents1().Player1;
+                        Player p2 = m.getOpponents1().Player2;
+                        Player p3 = m.getOpponents2().Player1;
+                        Player p4 = m.getOpponents2().Player2;
+                        string p1Name = $" {p1.getLastname()} {p1.getFirstname()}";
+                        string p2Name = $" {p2.getLastname()} {p2.getFirstname()}";
+                        string p3Name = $" {p3.getLastname()} {p3.getFirstname()}";
+                        string p4Name = $" {p4.getLastname()} {p4.getFirstname()}";
+                        Opponents winner = m.getWinner();
+                        Player w1 = winner.Player1;
+                        Player w2 = winner.Player2;
+                        if (w1.getLastname().Equals(p1.getLastname()))
+                        {
+                            win = $" {p1.getLastname()} {p1.getFirstname()} - {p2.getLastname()} {p2.getFirstname()}";
+                            loose = $"{p3.getLastname()} {p3.getFirstname()} - {p4.getLastname()} {p4.getFirstname()} ";
+                        }
+                        else
+                        {
+                            loose = $" {p1.getLastname()} {p1.getFirstname()} - {p2.getLastname()} {p2.getFirstname()}";
+                            win = $"{p3.getLastname()} {p3.getFirstname()} - {p4.getLastname()} {p4.getFirstname()} ";
 
-                    // Définissez la position du TextBlock dans la grille
-                    Grid.SetRow(matchTextBlock, i);
-                    Grid.SetColumn(matchTextBlock, 0); // Vous pouvez ajuster la colonne en fonction de vos besoins
+                        }
+                        MatchInfo matchInfo = new MatchInfo(date,GetRoundDouble(round), loose, win, scoreWin, scoreLoose);
+                        matchInfos.Add(matchInfo);
+                        
+                        
+                    }
+
+
                 }
-
+                scheduleWindow.MatchItemControl.ItemsSource = matchInfos;
+                scheduleWindow.TitleText = type;
                 scheduleWindow.Show();
+
             }
         }
+        public string GetRoundSingle(int round)
+        {
+            switch (round)
+            {
+                case 0:
+                    return "1er tour";
+                case 1:
+                    return "2ème tour";
+                case 2:
+                    return "3ème tour";
+                case 3:
+                    return "4ème tour";
+                case 4:
+                    return "Quart de finale";
+                case 5:
+                    return "Demi-finale";
+                case 6:
+                    return "Finale";
+                default:
+                    return "Erreur";
+            }
+        }
+        public string GetRoundDouble(int round)
+        {
+            switch (round)
+            {
+                case 0:
+                    return "1er tour";
+                case 1:
+                    return "2ème tour";
+                case 2:
+                    return "3ème tour";
+                case 3:
+                    return "Quart de finale";
+                case 4:
+                    return "Demi-finale";
+                case 5:
+                    return "Finale";
+                default:
+                    return "Erreur";
+            }
+        }
+        
 
 
     }
