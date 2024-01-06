@@ -36,8 +36,8 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             this.actualRound = 0;
             this.matcheList = new List<Match>();
         }
-      
-        
+
+
         //Jouer un tour du schedule
         public async Task PlayNextRound()
         {
@@ -48,12 +48,12 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             Referee referee;
             foreach (Match match in matches)
             {
-                
-                while (!TryAssignCourtAndReferee(out court, out  referee))
+
+                while (!TryAssignCourtAndReferee(out court, out referee))
                 {
                     await Task.Delay(0001);
                 }
-                
+
                 match.setCourt(court);
                 match.setReferee(referee);
                 matchDAO.Update(match);
@@ -62,7 +62,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
 
                 winners.Add(winner);
                 this.matchPlayed++;
-                
+
                 Tournament.courtsList.Enqueue(court);
                 Tournament.refereesList.Enqueue(referee);
             }
@@ -71,7 +71,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             Tournament.round = this.actualRound;
             this.actualRound++;
         }
-        
+
 
 
         //Générer les match (Horraire-Adversaire)
@@ -86,7 +86,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                 DateTime currentDate = SetMatchDate();
 
                 Match m = CreateMatch(op1, op2, currentDate);
-                
+
 
                 if (m != null)
                 {
@@ -99,7 +99,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             }
             this.matcheList.AddRange(matches);
             return matches;
-            
+
         }
         //Set les dates des matchs
         private DateTime SetMatchDate()
@@ -157,16 +157,16 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
 
         //Remplissage schedule
         public void Fill(List<Player> men, List<Player> women)
-               {
+        {
             if (this.scheduleType == ScheduleType.GentlemenSingle || this.scheduleType == ScheduleType.LadiesSingle)
             {
                 if (this.scheduleType == ScheduleType.GentlemenSingle)
                 {
-                   GenerateOpponentsSingle(men);
+                    GenerateOpponentsSingle(men);
                 }
                 else
                 {
-                   GenerateOpponentsSingle(women);
+                    GenerateOpponentsSingle(women);
                 }
             }
             else
@@ -178,13 +178,13 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         {
             int IsOpponentCreated;
             Queue<Opponents> opponentsList = new Queue<Opponents>();
-            if(type == ScheduleType.GentlemenDouble)
+            if (type == ScheduleType.GentlemenDouble)
             {
                 for (int i = 0; i < 64; i++)
                 {
-                    Opponents oponnents = new Opponents(men[i *2], men[(i*2)+1]);
+                    Opponents oponnents = new Opponents(men[i * 2], men[(i * 2) + 1]);
                     IsOpponentCreated = opponentsDAO.Create(oponnents);
-                    if (IsOpponentCreated!=-1)
+                    if (IsOpponentCreated != -1)
                     {
                         oponnents.Id = IsOpponentCreated;
                         opponentsList.Enqueue(oponnents);
@@ -193,11 +193,11 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                 this.opponentsList = opponentsList;
                 Shuffle(opponentsList);
             }
-            else if(type == ScheduleType.LadiesDouble)
+            else if (type == ScheduleType.LadiesDouble)
             {
                 for (int i = 0; i < 64; i++)
                 {
-                    Opponents opponents =  new Opponents(women[i * 2], women[(i * 2) + 1]);
+                    Opponents opponents = new Opponents(women[i * 2], women[(i * 2) + 1]);
                     IsOpponentCreated = opponentsDAO.Create(opponents);
                     if (IsOpponentCreated != -1)
                     {
@@ -210,9 +210,9 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
 
 
             }
-            else if(type == ScheduleType.MixedDouble)
+            else if (type == ScheduleType.MixedDouble)
             {
-                List<Player> MixedList= Schedule.MixList(men, women, 64);
+                List<Player> MixedList = Schedule.MixList(men, women, 64);
                 for (int i = 0; i < 64; i++)
                 {
                     Opponents oponents = new Opponents(MixedList[i * 2], MixedList[(i * 2) + 1]);
@@ -247,7 +247,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             Shuffle(opponentsList);
 
         }
-        
+
         //Methodes utiles
 
         static List<T> MixList<T>(List<T> liste1, List<T> liste2, int taille)
@@ -349,6 +349,24 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             }
 
         }
+        public static string GetScheduleString(Schedule.ScheduleType type)
+        {
+            switch (type)
+            {
+                case Schedule.ScheduleType.GentlemenSingle:
+                    return "Simple messieurs";
+                case Schedule.ScheduleType.LadiesSingle:
+                    return "Simple dames";
+                case Schedule.ScheduleType.GentlemenDouble:
+                    return "Double messieurs";
+                case Schedule.ScheduleType.LadiesDouble:
+                    return "Double dames";
+                case Schedule.ScheduleType.MixedDouble:
+                    return "Double mixte";
+                default:
+                    return "Erreur";
+            }
+        }
         //Getter Setter
         public Queue<Opponents> GetOpponentsList()
         {
@@ -374,7 +392,13 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         {
             return matchPlayed;
         }
-       
+        public List<Match> GetMatches()
+        {
+            return matcheList;
+        }
+
     }
+
 }
+        
 

@@ -18,6 +18,9 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         private int type;
         private Opponents opponents1;
         private Opponents opponents2;
+        private Opponents winner;
+        private int ScoreWinner;
+        private int ScoreLooser;
         private Referee referee;
         private Court court;
         private List<Set> sets = new List<Set>();
@@ -79,14 +82,20 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             
             
         }
-        private Opponents WhoWin(int countOp1, int countOp2)
+        public Opponents WhoWin(int countOp1, int countOp2)
         {
             if (countOp1 > countOp2)
             {
+                this.ScoreWinner = countOp1;
+                this.ScoreLooser = countOp2;
+                winner = this.opponents1;
                 return this.opponents1;
             }
             else
             {
+                this.ScoreWinner = countOp2;
+                this.ScoreLooser = countOp1;
+                winner = this.opponents2;
                 return this.opponents2;
             }
         }
@@ -184,7 +193,18 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         {
             this.type = type;
         }
-
+        public Opponents getWinner()
+        {
+            return winner;
+        }
+        public int getScoreWinner()
+        {
+            return ScoreWinner;
+        }
+        public int getScoreLooser()
+        {
+            return ScoreLooser;
+        }
         
     }
 }
