@@ -9,9 +9,12 @@
     <Grid RenderTransformOrigin="0.5,0.5">
         <Button Content="Start" HorizontalAlignment="Left" Margin="200,115,0,0" VerticalAlignment="Top" Click="Button_Click"/>
         <TextBlock x:Name="title" HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap" Text="Grand Slam Tournament" VerticalAlignment="Top" FontWeight="Bold" FontSize="18"/>
-        <TextBlock x:Name="tour" HorizontalAlignment="Left" Margin="684,16,0,0" TextWrapping="Wrap" Text="Tour n° " VerticalAlignment="Top" FontWeight="Bold"/>
+        <TextBlock  HorizontalAlignment="Left" Margin="362,115,0,0" TextWrapping="Wrap" Text="Single " VerticalAlignment="Top" FontWeight="Bold"/>
+        <TextBlock x:Name="tourSingle" HorizontalAlignment="Left" Margin="362,164,0,0" TextWrapping="Wrap" Text="Tour n° " VerticalAlignment="Top" FontWeight="Bold" RenderTransformOrigin="-2.995,-1.163"/>
+        <TextBlock  HorizontalAlignment="Left" Margin="634,118,0,0" TextWrapping="Wrap" Text="Double " VerticalAlignment="Top" FontWeight="Bold" RenderTransformOrigin="1.515,-6.073"/>
+        <TextBlock x:Name="tourDouble" HorizontalAlignment="Left" Margin="634,164,0,0" TextWrapping="Wrap" Text="Tour n° " VerticalAlignment="Top" FontWeight="Bold" RenderTransformOrigin="0.783,0.122"/>
         <Label Content="Lancer le tour" HorizontalAlignment="Left" Margin="74,112,0,0" VerticalAlignment="Top"/>
-        <Label Content="Voir Gentlemen Singmle" HorizontalAlignment="Left" Margin="66,167,0,0" VerticalAlignment="Top"/>
+        <Label Content="Voir Gentlemen Single" HorizontalAlignment="Left" Margin="66,167,0,0" VerticalAlignment="Top"/>
         <Label Content="Voir Ladies Single" HorizontalAlignment="Left" Margin="66,0,0,0" VerticalAlignment="Center"/>
         <Label Content="Voir Gentlemen Double" HorizontalAlignment="Left" Margin="66,239,0,0" VerticalAlignment="Top"/>
         <Label Content="Voir Ladies Double" HorizontalAlignment="Left" Margin="66,270,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.489,1.134"/>

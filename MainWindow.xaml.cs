@@ -22,7 +22,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
     /// </summary>
     public partial class MainWindow : Window
     {
-        private int currentTourNumber = 1;
+        private int currentTourNumber = 0;
         Tournament t = new Tournament("TestTournoi", new DateTime(2024, 1, 1));
         public MainWindow()
         {
@@ -34,7 +34,9 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         }
         private void UpdateTourTextBlock()
         {
-            tour.Text = "Tour n° " + currentTourNumber.ToString();
+            tourSingle.Text = GetRoundSingle(currentTourNumber);
+            tourDouble.Text = GetRoundDouble(currentTourNumber);
+
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
@@ -88,6 +90,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         }
         private void AfficherAvancement(int enumValue)
         {
+            int CurrentMatch = 0;
             List<Schedule> scheduleList = this.t.GetSchedules();
             Schedule type = scheduleList[enumValue];
             ScheduleWindow scheduleWindow = new ScheduleWindow();
@@ -98,68 +101,75 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                 string TypeString = Schedule.GetScheduleString(type.GetType());
                 foreach (Match m in type.GetMatches())
                 {
-                    DateTime date = m.getDate();
-                    int round = m.getRound();
-                    string win;
-                    string loose;
-                    int scoreWin = m.getScoreWinner();
-                    int scoreLoose = m.getScoreLooser();
-                    if (type.GetType() == Schedule.ScheduleType.GentlemenSingle || type.GetType() == Schedule.ScheduleType.LadiesSingle)
-                    {
-                        Player p1 = m.getOpponents1().Player1;
-                        Player p2 = m.getOpponents2().Player1;
-                        Opponents winner = m.getWinner();
-                        Player w = winner.Player1;
-                        if (w.getLastname().Equals(p1.getLastname()))
+                        
+                        DateTime date = m.getDate();
+                        int round = m.getRound();
+                        string win;
+                        string loose;
+                        int scoreWin = m.getScoreWinner();
+                        int scoreLoose = m.getScoreLooser();
+                        if (type.GetType() == Schedule.ScheduleType.GentlemenSingle || type.GetType() == Schedule.ScheduleType.LadiesSingle)
                         {
-                            win = $" {p1.getLastname()} {p1.getFirstname()}";
-                            loose = $" {p2.getLastname()} {p2.getFirstname()}";
+                            Player p1 = m.getOpponents1().Player1;
+                            Player p2 = m.getOpponents2().Player1;
+                            Opponents winner = m.getWinner();
+                            Player w = winner.Player1;
+                            if (w.getLastname().Equals(p1.getLastname()))
+                            {
+                                win = $" {p1.getLastname()} {p1.getFirstname()}";
+                                loose = $" {p2.getLastname()} {p2.getFirstname()}";
+                            }
+                            else
+                            {
+                                loose = $" {p1.getLastname()} {p1.getFirstname()}";
+                                win = $" {p2.getLastname()} {p2.getFirstname()}";
+
+                            }
+                            MatchInfo matchInfo = new MatchInfo(date, GetRoundSingle(round), loose, win, scoreWin, scoreLoose);
+                            matchInfos.Add(matchInfo);
                         }
                         else
                         {
-                            loose = $" {p1.getLastname()} {p1.getFirstname()}";
-                            win = $" {p2.getLastname()} {p2.getFirstname()}";
+                            Player p1 = m.getOpponents1().Player1;
+                            Player p2 = m.getOpponents1().Player2;
+                            Player p3 = m.getOpponents2().Player1;
+                            Player p4 = m.getOpponents2().Player2;
+                            string p1Name = $" {p1.getLastname()} {p1.getFirstname()}";
+                            string p2Name = $" {p2.getLastname()} {p2.getFirstname()}";
+                            string p3Name = $" {p3.getLastname()} {p3.getFirstname()}";
+                            string p4Name = $" {p4.getLastname()} {p4.getFirstname()}";
+                            Opponents winner = m.getWinner();
+                            Player w1 = winner.Player1;
+                            Player w2 = winner.Player2;
+                            if (w1.getLastname().Equals(p1.getLastname()))
+                            {
+                                win = $" {p1.getLastname()} {p1.getFirstname()} - {p2.getLastname()} {p2.getFirstname()}";
+                                loose = $"{p3.getLastname()} {p3.getFirstname()} - {p4.getLastname()} {p4.getFirstname()} ";
+                            }
+                            else
+                            {
+                                loose = $" {p1.getLastname()} {p1.getFirstname()} - {p2.getLastname()} {p2.getFirstname()}";
+                                win = $"{p3.getLastname()} {p3.getFirstname()} - {p4.getLastname()} {p4.getFirstname()} ";
 
-                        }                       
-                        MatchInfo matchInfo = new MatchInfo(date,GetRoundSingle(round),loose,win,scoreWin,scoreLoose);
-                        matchInfos.Add(matchInfo);
-                    }
-                    else
-                    {
-                        Player p1 = m.getOpponents1().Player1;
-                        Player p2 = m.getOpponents1().Player2;
-                        Player p3 = m.getOpponents2().Player1;
-                        Player p4 = m.getOpponents2().Player2;
-                        string p1Name = $" {p1.getLastname()} {p1.getFirstname()}";
-                        string p2Name = $" {p2.getLastname()} {p2.getFirstname()}";
-                        string p3Name = $" {p3.getLastname()} {p3.getFirstname()}";
-                        string p4Name = $" {p4.getLastname()} {p4.getFirstname()}";
-                        Opponents winner = m.getWinner();
-                        Player w1 = winner.Player1;
-                        Player w2 = winner.Player2;
-                        if (w1.getLastname().Equals(p1.getLastname()))
-                        {
-                            win = $" {p1.getLastname()} {p1.getFirstname()} - {p2.getLastname()} {p2.getFirstname()}";
-                            loose = $"{p3.getLastname()} {p3.getFirstname()} - {p4.getLastname()} {p4.getFirstname()} ";
-                        }
-                        else
-                        {
-                            loose = $" {p1.getLastname()} {p1.getFirstname()} - {p2.getLastname()} {p2.getFirstname()}";
-                            win = $"{p3.getLastname()} {p3.getFirstname()} - {p4.getLastname()} {p4.getFirstname()} ";
+                            }
+                            MatchInfo matchInfo = new MatchInfo(date, GetRoundDouble(round), loose, win, scoreWin, scoreLoose);
+                            matchInfos.Add(matchInfo);
+
 
                         }
-                        MatchInfo matchInfo = new MatchInfo(date,GetRoundDouble(round), loose, win, scoreWin, scoreLoose);
-                        matchInfos.Add(matchInfo);
-                        
-                        
-                    }
+                   
 
 
                 }
                 scheduleWindow.MatchItemControl.ItemsSource = matchInfos;
                 scheduleWindow.TitleText = TypeString;
+                CurrentMatch++;
             }
-                scheduleWindow.Show();
+            
+             scheduleWindow.Show();
+            
+
+
 
         }
         public string GetRoundSingle(int round)
