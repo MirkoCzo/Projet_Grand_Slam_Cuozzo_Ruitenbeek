@@ -20,7 +20,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         private Opponents opponents2;
         private Referee referee;
         private Court court;
-        private List<Set> sets;
+        private List<Set> sets = new List<Set>();
         private int id_Tournament;
         private SetDAO setDAO = new SetDAO();
         public Match(DateTime date, int duration, int round, int type, Opponents opponents1, Opponents opponents2, Referee referee, Court court, int id_Tournament)
@@ -48,19 +48,12 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             while (!CheckIfMatchIsFinished(ScoreOp1, ScoreOp2, this.type))
             {
                 Set set = new Set(this.id);
-                set.Play();
-                if (set.GetWinner().Id == this.opponents1.Id)
-                {
-                    ScoreOp1++;
-                }
-                else
-                {
-                    ScoreOp2++;
-                }
                 set.setSetNumber(setNumber);
+                set.setScoreOp1(ScoreOp1);
+                set.setScoreOp2(ScoreOp2);
                 setNumber++;
                 int id = setDAO.Create(set);
-                if(id != -1)
+                if (id != -1)
                 {
                     set.setId(id);
                     sets.Add(set);
@@ -69,6 +62,17 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                 {
                     throw new Exception("Erreur lors de la création du set");
                 }
+                set.Play();
+                setDAO.Update(set);
+                if (set.GetWinner().Id == this.opponents1.Id)
+                {
+                    ScoreOp1++;
+                }
+                else
+                {
+                    ScoreOp2++;
+                }
+                
                 
             }
             return WhoWin(ScoreOp1, ScoreOp2);

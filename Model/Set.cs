@@ -20,7 +20,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
         public int id_match;
         private List<Games> games;
         private Opponents winner;
-        private GamesDAO gamesDAO;
+        private GamesDAO gamesDAO = new GamesDAO();
         private MatchDAO matchDAO = new MatchDAO();
         private Match match;
         bool isTieBreakPlayed = false;
@@ -45,7 +45,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
         public void Play()
         {
             int gameNumber = 1;
-            Schedule.ScheduleType type = GetTypeMatch(this.match); // Utilisez l'objet match fourni
+            Schedule.ScheduleType type = GetTypeMatch(getMatch(this.id_match)); 
             games = new List<Games>();
             while (!CheckIfSetIsFinished(scoreOp1, scoreOp2, match) && !isTieBreakPlayed && !isSuperTieBreakPlayed)
             {
@@ -90,6 +90,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
 
                 }
                 //Sauve le jeu
+              
                 game.setGameNumber(gameNumber);
                 game.setIdSet(this.id);
                 int id = gamesDAO.Create(game);
@@ -148,11 +149,11 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
 
                 if (game.getScoreOpOne().Last() > game.getScoreOpTwo().Last())
                 {
-                    scoreOp1++;
+                    this.scoreOp1++;
                 }
                 else
                 {
-                    scoreOp2++;
+                    this.scoreOp2++;
                 } 
         }
 

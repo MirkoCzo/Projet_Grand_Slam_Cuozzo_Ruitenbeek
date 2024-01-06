@@ -49,7 +49,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                 
                 while (!TryAssignCourtAndReferee(out court, out  referee))
                 {
-                    await Task.Delay(1000);
+                    await Task.Delay(0001);
                 }
                 
                 match.setCourt(court);

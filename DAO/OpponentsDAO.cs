@@ -54,7 +54,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
 
         public override Opponents Find(int id)
         {
-            Opponents opponents = null;
+            Opponents opponents = new Opponents();
             try
             {
                 using(SqlConnection connection = new SqlConnection(connectionString))

@@ -44,6 +44,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             Tournament.date = date;
             int id = tournamentDAO.Create(this);
             Tournament.id = id;
+            FillList();
         }
         public int getId() { return id; }
 

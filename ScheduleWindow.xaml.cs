@@ -33,5 +33,20 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         {
             get { return comboBoxMatches; }
         }
+        public TreeView TreeViewMatches
+        {
+            get { return treeViewMatches; }
+        }
+
+        // Ajoutez une méthode pour ajouter les matchs au TreeView
+        public void AddMatchesToTreeView(string matchDetails)
+        {
+            // Créer un nouvel élément TreeViewItem pour chaque match
+            TreeViewItem matchItem = new TreeViewItem();
+            matchItem.Header = matchDetails;
+
+            // Ajouter l'élément au TreeView
+            treeViewMatches.Items.Add(matchItem);
+        }
     }
 }
