@@ -104,24 +104,24 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         //Set les dates des matchs
         private DateTime SetMatchDate()
         {
-            DateTime currentDate = this.currentDate;
+            DateTime currentDate = Tournament.date;
 
             if (this.matchPlayed % 30 == 0)
             {
                 currentDate = currentDate.AddDays(1);
                 currentDate = currentDate.Date.AddHours(10);
             }
-            else if (this.matchPlayed % 10 == 0)
+            else if (this.matchPlayed % 15 == 0)
             {
                 currentDate = currentDate.AddHours(4);
             }
             else
             {
-                currentDate = currentDate.AddHours(0); // Aucun changement d'heure pour les 10 premiers matchs
+                currentDate = currentDate.AddHours(0); // Aucun changement d'heure tout les 15 matchs
             }
 
             this.matchPlayed++;
-            this.currentDate = currentDate;
+            Tournament.date = currentDate;
             return currentDate;
         }
         //Save les matchs
@@ -370,66 +370,11 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         {
             return currentMatch;
         }
-        
-        /*
-        public async void PlayNextRoundV1()
+        public int GetMatchPlayed()
         {
-            int matchesPlayed = 0;
-            DateTime currentDate = Tournament.date;
-            int matchesCount = opponentsList.Count / 2;
-            List<Opponents> winners = new List<Opponents>();
-            for (int i = 0; i < matchesCount; i++)
-            {
-                if (Tournament.courtsList.Count == 0 || Tournament.refereesList.Count == 0)
-                {
-                    matchesCount--;
-                }
-                else
-                {
-                    //Set up Opponents 
-                    Opponents op1 = opponentsList.Dequeue();
-                    Opponents op2 = opponentsList.Dequeue();
-
-                    //Set up Date
-                    if (matchesPlayed % 30 == 0)
-                    {
-                        currentDate = currentDate.AddDays(1);
-                        currentDate = currentDate.Date.AddHours(10);
-                    }
-                    else
-                    {
-                        currentDate.AddHours(4);
-                    }
-
-                    //Set up Court-Referee
-                    Court court = Tournament.courtsList.Dequeue();
-                    Referee referee = Tournament.refereesList.Dequeue();
-
-                    //On crée le match
-                    Match m = new Match(currentDate, 0, actualRound, (int)scheduleType, op1, op2, referee, court, Tournament.id);
-                    int matchId = matchDAO.Create(m);
-                    if (matchId != -1)
-                    {
-                        m.setId(matchId);
-                    }
-                    //On joue le match
-                    Opponents winner = await m.Play();
-                    //On sauve le match
-                    matcheList.Enqueue(m);
-                    //On libere le court/arbitre
-                    Tournament.courtsList.Enqueue(court);
-                    Tournament.refereesList.Enqueue(referee);
-                    //On sauve l'opponent gagnant
-                    winners.Add(winner);
-
-                    matchesPlayed++;
-                }
-            }
-            opponentsList = new Queue<Opponents>(winners);
-            Tournament.date = currentDate;
-            this.actualRound++;
+            return matchPlayed;
         }
-        */
+       
     }
 }
 

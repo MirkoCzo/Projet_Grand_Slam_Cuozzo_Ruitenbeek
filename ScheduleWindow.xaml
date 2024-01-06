@@ -4,10 +4,28 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Schedule Details" Height="300" Width="400">
     <Grid>
-        
-            <ComboBox x:Name="comboBoxMatches" HorizontalAlignment="Left" VerticalAlignment="Top" Width="300" Height="30" Margin="10,10,0,0"/>
-        <TreeView x:Name="treeViewMatches" HorizontalAlignment="Left" VerticalAlignment="Top" Width="300" Height="200" Margin="10,10,0,0">
-            <!-- Vous pouvez personnaliser les propriétés du TreeView selon vos besoins -->
-        </TreeView>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="90*"/>
+            
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="8*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="Id Match" HorizontalAlignment="Center" FontWeight="Bold" FontSize="10"/>
+        <TextBlock Grid.Column="1" Grid.Row="0" Text="Date" HorizontalAlignment="Center" FontWeight="Bold" FontSize="10"/>
+        <TextBlock Grid.Column="2" Grid.Row="0" Text="Opponent 1" HorizontalAlignment="Center" FontWeight="Bold" FontSize="10"/>
+        <TextBlock Grid.Column="3" Grid.Row="0" Text="Opponent 2" HorizontalAlignment="Center" FontWeight="Bold" FontSize="10"/>
+        <TextBlock Grid.Column="4" Grid.Row="0" Text="Tour" HorizontalAlignment="Center" FontWeight="Bold" FontSize="10"/>
+        <TextBlock Grid.Column="5" Grid.Row="0" Text="Winner" HorizontalAlignment="Center" FontWeight="Bold" FontSize="10"/>
+        <Grid x:Name="scheduleGrid" Grid.Row="1" Grid.ColumnSpan="6">
+            <!-- Vos éléments dynamiques seront ajoutés ici programmation. -->
+        </Grid>
+
     </Grid>
 </Window>

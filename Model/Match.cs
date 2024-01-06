@@ -44,7 +44,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         {
             int ScoreOp1 = 0;
             int ScoreOp2 = 0;
-            int setNumber = 1;
+            int setNumber = 0;
             while (!CheckIfMatchIsFinished(ScoreOp1, ScoreOp2, this.type))
             {
                 Set set = new Set(this.id);

@@ -19,35 +19,18 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
     /// </summary>
     public partial class ScheduleWindow : Window
     {
+
         public ScheduleWindow()
         {
             InitializeComponent();
             
             
         }
-
-        private void Button_Close_Click(object sender, RoutedEventArgs e)
+        public Grid ScheduleGrid
         {
-            Close();
-        }
-        public ComboBox ComboBoxMatches
-        {
-            get { return comboBoxMatches; }
-        }
-        public TreeView TreeViewMatches
-        {
-            get { return treeViewMatches; }
+            get { return scheduleGrid; }
         }
 
-        // Ajoutez une méthode pour ajouter les matchs au TreeView
-        public void AddMatchesToTreeView(string matchDetails)
-        {
-            // Créer un nouvel élément TreeViewItem pour chaque match
-            TreeViewItem matchItem = new TreeViewItem();
-            matchItem.Header = matchDetails;
 
-            // Ajouter l'élément au TreeView
-            treeViewMatches.Items.Add(matchItem);
-        }
     }
 }
