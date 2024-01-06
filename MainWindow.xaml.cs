@@ -78,17 +78,25 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
 
         private void AffSchedules(object sender, RoutedEventArgs e)
         {
-            AfficherAvancement();
+            if (sender is Button button)
+            {
+                if (int.TryParse(button.Tag.ToString(), out int param))
+                {
+                    AfficherAvancement(param);
+                }
+            }
         }
-        private void AfficherAvancement()
+        private void AfficherAvancement(int enumValue)
         {
             List<Schedule> scheduleList = this.t.GetSchedules();
-            foreach (Schedule s in scheduleList)
-            {
+            Schedule type = scheduleList[enumValue];
+            ScheduleWindow scheduleWindow = new ScheduleWindow();
+            for (int i =0; i < type.GetNbRound1(type.GetType()); i++)
+            { 
                 List<MatchInfo> matchInfos = new List<MatchInfo>();
-                ScheduleWindow scheduleWindow = new ScheduleWindow();
-                string type = Schedule.GetScheduleString(s.GetType());
-                foreach (Match m in s.GetMatches())
+                
+                string TypeString = Schedule.GetScheduleString(type.GetType());
+                foreach (Match m in type.GetMatches())
                 {
                     DateTime date = m.getDate();
                     int round = m.getRound();
@@ -96,7 +104,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                     string loose;
                     int scoreWin = m.getScoreWinner();
                     int scoreLoose = m.getScoreLooser();
-                    if (s.GetType() == Schedule.ScheduleType.GentlemenSingle || s.GetType() == Schedule.ScheduleType.LadiesSingle)
+                    if (type.GetType() == Schedule.ScheduleType.GentlemenSingle || type.GetType() == Schedule.ScheduleType.LadiesSingle)
                     {
                         Player p1 = m.getOpponents1().Player1;
                         Player p2 = m.getOpponents2().Player1;
@@ -149,10 +157,10 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
 
                 }
                 scheduleWindow.MatchItemControl.ItemsSource = matchInfos;
-                scheduleWindow.TitleText = type;
+                scheduleWindow.TitleText = TypeString;
+            }
                 scheduleWindow.Show();
 
-            }
         }
         public string GetRoundSingle(int round)
         {
@@ -200,6 +208,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
 
 
     }
-        }
+}
+
 
 
