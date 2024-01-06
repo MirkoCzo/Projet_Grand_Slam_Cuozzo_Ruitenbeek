@@ -64,7 +64,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
 
         public override Match Find(int id)
         {
-            Match match = null;
+            Match match = new Match();
             try 
             {
                using(SqlConnection connection = new SqlConnection(connectionString))
@@ -75,19 +75,27 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                     SqlDataReader reader = cmd.ExecuteReader();
                     if(reader.Read())
                     {
-                        match = new Match();
+
                         match.setId((int)reader["Id_Match"]);
                         match.setDate((DateTime)reader["Date"]);
                         match.setDuration((int)reader["Duration"]);
                         match.setRound((int)reader["Round"]);
                         match.setType((int)reader["Type"]);
                         match.setId_Tournament((int)reader["Id_Tournament"]);
+
                         OpponentsDAO opponentsDAO = new OpponentsDAO();
-                        match.setOpponents1(opponentsDAO.Find((int)reader["Id_Opponent_1"]));
-                        match.setOpponents2(opponentsDAO.Find((int)reader["Id_Opponent_2"]));
-                        match.getCourt().setId((int)reader["Id_Court"]);//PAREIL POUR COURT
+                        int idOpponent1 = (int)reader["Id_Opponent_1"];
+                        int idOpponent2 = (int)reader["Id_Opponent_2"];
+                        match.setOpponents1(idOpponent1 != 0 ? opponentsDAO.Find(idOpponent1) : null);
+                        match.setOpponents2(idOpponent2 != 0 ? opponentsDAO.Find(idOpponent2) : null);
+
+                        CourtDAO courtDAO = new CourtDAO();
+                        int idCourt = (int)reader["Id_Court"];
+                        match.setCourt(idCourt != 0 ? courtDAO.Find(idCourt) : null);
+
                         RefereeDAO refereeDAO = new RefereeDAO();
-                        match.setReferee(refereeDAO.Find((int)reader["Id_Ref"]));
+                        int idRef = (int)reader["Id_Ref"];
+                        match.setReferee(idRef != 0 ? refereeDAO.Find(idRef) : null);
                     }
                 }
             }catch(SqlException ex)

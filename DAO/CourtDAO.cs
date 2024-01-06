@@ -67,7 +67,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                     {
                         court.setId(reader.GetInt32(0));
                         court.setNbSpectators(reader.GetInt32(1));
-                        court.setCovered(reader.GetByte(2) != 0);
+                        court.setCovered(reader.GetInt32(2) != 0);
                     }
                 }
             }

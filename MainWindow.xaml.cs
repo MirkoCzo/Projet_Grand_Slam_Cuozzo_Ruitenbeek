@@ -1,6 +1,7 @@
 ﻿using Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,42 +32,74 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         {
             Tournament t = new Tournament("TestTournoi", new DateTime(2024, 1, 1));
             t.GenerateSchedules();
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
 
-            int i = 0;
-            foreach (Schedule s in t.GetSchedules())
-            {
-               
-                int x = 1;
-                string scheduleDetails = "";
-                string matchs = "";
+            List<Schedule> scheduleList = t.GetSchedules();
+            scheduleList[1].PlayNextRound();
+            scheduleList[2].PlayNextRound();
+            scheduleList[3].PlayNextRound();
+            scheduleList[4].PlayNextRound();
+            scheduleList[0].PlayNextRound();
 
-                foreach (Opponents op in s.GetOpponentsList())
-                {
-                    if (op.Player2 != null)
-                    {
-                        scheduleDetails += $"{x}-{op.Player2.getFirstname()}-{op.Player1.getFirstname()} id : {op.Id}\n";
-                    }
-                    else
-                    {
-                        scheduleDetails += $"{x}-{op.Player1.getFirstname()} id : {op.Id}\n";
-                    }
-                    x++;
-                }
-                int count = s.GetOpponentsList().Count / 2;
-                List<Match> list = s.GenerateMatches(count);
-                Tournament.date = list.Last().getDate().AddDays(1);
-                ScheduleWindow scheduleWindow = new ScheduleWindow();
-                scheduleWindow.Title = $"Détails du planning {i}";
-                foreach (Match m in list)
-                {
-                    scheduleWindow.ComboBoxMatches.Items.Add($"Match {m.getId()}{m.getOpponents1().Player1.getLastname()} vs {m.getOpponents2().Player1.getLastname()} à {m.getDate()}/n");
-                }
-                scheduleWindow.Show();
+            stopwatch.Stop();
 
+           
 
-                i++;
-            }
+            // Afficher le temps écoulé
+            MessageBox.Show($"Temps écoulé : {stopwatch.Elapsed}");
         }
 
+        /*
+        foreach (Schedule s in t.GetSchedules())
+        {
+            s.PlayNextRound();
+            int count = s.GetOpponentsList().Count / 2;
+            List<Match> list = s.GenerateMatches(count);
+            ScheduleWindow scheduleWindow = new ScheduleWindow();
+            foreach (Match m in list)
+            {
+                scheduleWindow.ComboBoxMatches.Items.Add($"Match {m.getId()}{m.getOpponents1().Player1.getLastname()} vs {m.getOpponents2().Player1.getLastname()} à {m.getDate()}/n");
+            }
+            scheduleWindow.Show();
+
+            /*
+           foreach (Opponents op in s.GetOpponentsList())
+           {
+               if (op.Player2 != null)
+               {
+                   scheduleDetails += $"{x}-{op.Player2.getFirstname()}-{op.Player1.getFirstname()} id : {op.Id}\n";
+               }
+               else
+               {
+                   scheduleDetails += $"{x}-{op.Player1.getFirstname()} id : {op.Id}\n";
+               }
+               x++;
+           }
+
+           int count = s.GetOpponentsList().Count / 2;
+           List<Match> list = s.GenerateMatches(count);
+           Tournament.date = list.Last().getDate().AddDays(1);
+           ScheduleWindow scheduleWindow = new ScheduleWindow();
+
+           scheduleWindow.Title = $"Détails du planning {i}";
+           foreach (Match m in list)
+           {
+               scheduleWindow.ComboBoxMatches.Items.Add($"Match {m.getId()}{m.getOpponents1().Player1.getLastname()} vs {m.getOpponents2().Player1.getLastname()} à {m.getDate()}/n");
+           }
+
+           foreach(Match m in list)
+           {
+               string matchDetails = $"Match {m.getId()}: {m.getOpponents1().Player1.getLastname()} vs {m.getOpponents2().Player1.getLastname()} à {m.getDate()}";
+               scheduleWindow.AddMatchesToTreeView(matchDetails);
+           }
+           scheduleWindow.Show();
+            */
+
+
+
+
     }
-}
+        }
+
+

@@ -6,6 +6,8 @@
     <Grid>
         
             <ComboBox x:Name="comboBoxMatches" HorizontalAlignment="Left" VerticalAlignment="Top" Width="300" Height="30" Margin="10,10,0,0"/>
-        
+        <TreeView x:Name="treeViewMatches" HorizontalAlignment="Left" VerticalAlignment="Top" Width="300" Height="200" Margin="10,10,0,0">
+            <!-- Vous pouvez personnaliser les propriétés du TreeView selon vos besoins -->
+        </TreeView>
     </Grid>
 </Window>

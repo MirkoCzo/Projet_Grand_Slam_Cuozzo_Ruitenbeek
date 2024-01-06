@@ -59,7 +59,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
 
         public override Player Find(int id)
         { 
-            Player player = null;
+            Player player = new Player();
             try
             {
                 using(SqlConnection connection = new SqlConnection(connectionString))
