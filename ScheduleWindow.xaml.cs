@@ -23,6 +23,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         {
             InitializeComponent();
             
+            
         }
 
         private void Button_Close_Click(object sender, RoutedEventArgs e)

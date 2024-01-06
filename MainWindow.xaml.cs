@@ -22,9 +22,20 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
     /// </summary>
     public partial class MainWindow : Window
     {
+        private int currentTourNumber = 1;
         public MainWindow()
         {
             InitializeComponent();
+            Tournament t = new Tournament("TestTournoi", new DateTime(2024, 1, 1));
+            t.GenerateSchedules();
+            UpdateTourTextBlock();
+            
+
+        }
+        private void UpdateTourTextBlock()
+        {
+            // Mettez à jour le contenu du TextBlock avec le numéro actuel du tour
+            tour.Text = "Tour n° " + currentTourNumber.ToString();
         }
 
         // MainWindow.xaml.cs
@@ -36,24 +47,28 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             stopwatch.Start();
 
             List<Schedule> scheduleList = t.GetSchedules();
-            for (int i = 0; i < 7; i++)
+            foreach (Schedule s in scheduleList)
             {
-                scheduleList[1].PlayNextRound();
-
+                int NumberTourToPlay = s.GetNbRound1(s.GetType());
+                if (currentTourNumber <= NumberTourToPlay)
+                {                  
+                        s.PlayNextRound();
+                }               
+                
             }
-            Queue<Opponents> w = scheduleList[1].GetOpponentsList();
-            foreach (Opponents o in w)
-            {
-                MessageBox.Show(o.Player1.getLastname());
-            }
-
-
+            this.currentTourNumber++;
+            UpdateTourTextBlock();           
             stopwatch.Stop();
 
            
 
             // Afficher le temps écoulé
             MessageBox.Show($"Temps écoulé : {stopwatch.Elapsed}");
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+
         }
 
         /*

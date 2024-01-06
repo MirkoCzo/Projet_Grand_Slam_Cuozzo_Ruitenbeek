@@ -65,6 +65,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             }
             Tournament.date = this.currentDate;
             opponentsList = new Queue<Opponents>(winners);
+            Tournament.round = this.actualRound;
             this.actualRound++;
         }
         
@@ -301,6 +302,24 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                 case 3:
                     return 6; // 6 tours pour les programmes doubles
                 case 4:
+                    return 6; // 6 tours pour les programmes doubles
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+        public int GetNbRound1(ScheduleType type)
+        {
+            switch (type)
+            {
+                case ScheduleType.GentlemenSingle:
+                    return 7; // 7 tours pour les programmes simples
+                case ScheduleType.LadiesSingle:
+                    return 7; // 7 tours pour les programmes simples
+                case ScheduleType.GentlemenDouble:
+                    return 7; // 7 tours pour les programmes simples
+                case ScheduleType.LadiesDouble:
+                    return 6; // 6 tours pour les programmes doubles
+                case ScheduleType.MixedDouble:
                     return 6; // 6 tours pour les programmes doubles
                 default:
                     throw new ArgumentOutOfRangeException();

@@ -18,6 +18,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         private string name;
         public static Queue<Court> courtsList;
         public static Queue<Referee> refereesList;
+        public static int round;
         public static DateTime date;
         private List<Schedule> scheduleList;
         private TournamentDAO tournamentDAO = new TournamentDAO();
