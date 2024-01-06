@@ -34,11 +34,9 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         }
         private void UpdateTourTextBlock()
         {
-            // Mettez à jour le contenu du TextBlock avec le numéro actuel du tour
             tour.Text = "Tour n° " + currentTourNumber.ToString();
         }
 
-        // MainWindow.xaml.cs
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
             Stopwatch stopwatch = new Stopwatch();
@@ -49,14 +47,12 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             foreach (Schedule s in scheduleList)
             {
                 int NumberTourToPlay = s.GetNbRound1(s.GetType());
-                if (currentTourNumber <= NumberTourToPlay && s.GetType() == Schedule.ScheduleType.GentlemenSingle)
+                if (currentTourNumber <= NumberTourToPlay)
                 {
                     await s.PlayNextRound();
-                    match.Text = "Match n° " + s.GetCurrentMatch().getId();
+                    
                 }
-
                 winner = s.GetOpponentsList();
-
                 if (winner.Count == 1)
                 {
                     Opponents op = winner.Dequeue();
@@ -80,58 +76,41 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             MessageBox.Show($"Temps écoulé : {stopwatch.Elapsed}");
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void AffSchedules(object sender, RoutedEventArgs e)
         {
-
+            AfficherAvancement();
         }
-
-        /*
-        foreach (Schedule s in t.GetSchedules())
+        private void AfficherAvancement()
         {
-            s.PlayNextRound();
-            int count = s.GetOpponentsList().Count / 2;
-            List<Match> list = s.GenerateMatches(count);
-            ScheduleWindow scheduleWindow = new ScheduleWindow();
-            foreach (Match m in list)
+            List<Schedule> scheduleList = this.t.GetSchedules();
+
+            foreach (Schedule s in scheduleList)
             {
-                scheduleWindow.ComboBoxMatches.Items.Add($"Match {m.getId()}{m.getOpponents1().Player1.getLastname()} vs {m.getOpponents2().Player1.getLastname()} à {m.getDate()}/n");
+                int numOfMatchPlayed = s.GetMatchPlayed();
+                ScheduleWindow scheduleWindow = new ScheduleWindow();
+
+                for (int i = 0; i < numOfMatchPlayed; i++)
+                {
+                    TextBlock matchTextBlock = new TextBlock
+                    {
+                        Text = $"Match {i + 1}",
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        FontWeight = FontWeights.Bold,
+                        FontSize = 12
+                    };
+
+                    // Ajoutez le TextBlock à la grille
+                    scheduleWindow.ScheduleGrid.Children.Add(matchTextBlock);
+
+                    // Définissez la position du TextBlock dans la grille
+                    Grid.SetRow(matchTextBlock, i);
+                    Grid.SetColumn(matchTextBlock, 0); // Vous pouvez ajuster la colonne en fonction de vos besoins
+                }
+
+                scheduleWindow.Show();
             }
-            scheduleWindow.Show();
-
-            /*
-           foreach (Opponents op in s.GetOpponentsList())
-           {
-               if (op.Player2 != null)
-               {
-                   scheduleDetails += $"{x}-{op.Player2.getFirstname()}-{op.Player1.getFirstname()} id : {op.Id}\n";
-               }
-               else
-               {
-                   scheduleDetails += $"{x}-{op.Player1.getFirstname()} id : {op.Id}\n";
-               }
-               x++;
-           }
-
-           int count = s.GetOpponentsList().Count / 2;
-           List<Match> list = s.GenerateMatches(count);
-           Tournament.date = list.Last().getDate().AddDays(1);
-           ScheduleWindow scheduleWindow = new ScheduleWindow();
-
-           scheduleWindow.Title = $"Détails du planning {i}";
-           foreach (Match m in list)
-           {
-               scheduleWindow.ComboBoxMatches.Items.Add($"Match {m.getId()}{m.getOpponents1().Player1.getLastname()} vs {m.getOpponents2().Player1.getLastname()} à {m.getDate()}/n");
-           }
-
-           foreach(Match m in list)
-           {
-               string matchDetails = $"Match {m.getId()}: {m.getOpponents1().Player1.getLastname()} vs {m.getOpponents2().Player1.getLastname()} à {m.getDate()}";
-               scheduleWindow.AddMatchesToTreeView(matchDetails);
-           }
-           scheduleWindow.Show();
-            */
-
-
+        }
 
 
     }

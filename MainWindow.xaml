@@ -12,8 +12,7 @@
         <TextBlock x:Name="tour" HorizontalAlignment="Left" Margin="684,16,0,0" TextWrapping="Wrap" Text="Tour n° " VerticalAlignment="Top" FontWeight="Bold"/>
         <Label Content="Lancer le tour" HorizontalAlignment="Left" Margin="74,112,0,0" VerticalAlignment="Top"/>
         <Label Content="Voir Schedules" HorizontalAlignment="Left" Margin="74,167,0,0" VerticalAlignment="Top"/>
-        <Button Content="Voir" HorizontalAlignment="Left" Margin="200,173,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
-        <TextBlock x:Name="match" HorizontalAlignment="Left" Margin="340,292,0,0" TextWrapping="Wrap" Text="Match Current" VerticalAlignment="Top"/>
+        <Button Content="Voir" HorizontalAlignment="Left" Margin="200,173,0,0" VerticalAlignment="Top" Click="AffSchedules"/>
     </Grid>
 
 </Window>
