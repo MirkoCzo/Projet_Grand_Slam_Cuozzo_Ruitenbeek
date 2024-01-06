@@ -23,11 +23,11 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
     public partial class MainWindow : Window
     {
         private int currentTourNumber = 1;
+        Tournament t = new Tournament("TestTournoi", new DateTime(2024, 1, 1));
         public MainWindow()
         {
             InitializeComponent();
-            Tournament t = new Tournament("TestTournoi", new DateTime(2024, 1, 1));
-            t.GenerateSchedules();
+            this.t.GenerateSchedules();
             UpdateTourTextBlock();
             
 
@@ -39,28 +39,42 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         }
 
         // MainWindow.xaml.cs
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            Tournament t = new Tournament("TestTournoi", new DateTime(2024, 1, 1));
-            t.GenerateSchedules();
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
+            Queue<Opponents> winner = new Queue<Opponents>();
+            List<Schedule> scheduleList = this.t.GetSchedules();
 
-            List<Schedule> scheduleList = t.GetSchedules();
             foreach (Schedule s in scheduleList)
             {
                 int NumberTourToPlay = s.GetNbRound1(s.GetType());
-                if (currentTourNumber <= NumberTourToPlay)
-                {                  
-                        s.PlayNextRound();
-                }               
-                
-            }
-            this.currentTourNumber++;
-            UpdateTourTextBlock();           
-            stopwatch.Stop();
+                if (currentTourNumber <= NumberTourToPlay && s.GetType() == Schedule.ScheduleType.GentlemenSingle)
+                {
+                    await s.PlayNextRound();
+                    match.Text = "Match n° " + s.GetCurrentMatch().getId();
+                }
 
-           
+                winner = s.GetOpponentsList();
+
+                if (winner.Count == 1)
+                {
+                    Opponents op = winner.Dequeue();
+                    if (op.Player2 != null)
+                    {
+                        MessageBox.Show($"Le gagnant est {op.Player1.getLastname()} et {op.Player2.getLastname()}");
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Le gagnant est {op.Player1.getLastname()}");
+                    }
+                    winner.Enqueue(op);
+                }
+            }
+
+            this.currentTourNumber++;
+            UpdateTourTextBlock();
+            stopwatch.Stop();
 
             // Afficher le temps écoulé
             MessageBox.Show($"Temps écoulé : {stopwatch.Elapsed}");

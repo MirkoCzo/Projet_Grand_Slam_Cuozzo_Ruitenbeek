@@ -62,7 +62,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                 {
                     throw new Exception("Erreur lors de la création du set");
                 }
-                set.Play();
+                await set.Play();
                 setDAO.Update(set);
                 if (set.GetWinner().Id == this.opponents1.Id)
                 {

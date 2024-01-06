@@ -56,12 +56,12 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
 
         public override Referee Find(int id)
         {
-            Referee referee = null;
+            Referee referee = new Referee();
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    SqlCommand cmd = new SqlCommand($"SELECT * FROM dbo.Referee WHERE Id = @Id", connection);
+                    SqlCommand cmd = new SqlCommand($"SELECT * FROM dbo.Referee WHERE Id_Referee = @Id", connection);
                     cmd.Parameters.AddWithValue("Id", id);
                     connection.Open();
                     SqlDataReader reader = cmd.ExecuteReader();
@@ -70,7 +70,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.DAO
                         referee.setId(reader.GetInt32(0));
                         referee.setFirstname(reader.GetString(1));
                         referee.setLastname(reader.GetString(2));
-                        referee.setNationality(reader.GetString(5));
+                        referee.setNationality(reader.GetString(3));
                     }
                 }
             }

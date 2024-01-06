@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 
 namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
@@ -27,6 +28,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         MatchDAO matchDAO = new MatchDAO();
         int matchPlayed = 0;
         DateTime currentDate = Tournament.date;
+        Match currentMatch = new Match();
 
         public Schedule(ScheduleType scheduleType)
         {
@@ -37,7 +39,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
       
         
         //Jouer un tour du schedule
-        public async void PlayNextRound()
+        public async Task PlayNextRound()
         {
             int matchesCount = opponentsList.Count / 2;
             List<Match> matches = GenerateMatches(matchesCount);
@@ -55,8 +57,9 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                 match.setCourt(court);
                 match.setReferee(referee);
                 matchDAO.Update(match);
-
+                currentMatch = match;
                 Opponents winner = await match.Play();
+
                 winners.Add(winner);
                 this.matchPlayed++;
                 
@@ -69,6 +72,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             this.actualRound++;
         }
         
+
 
         //Générer les match (Horraire-Adversaire)
         public List<Match> GenerateMatches(int count)
@@ -361,6 +365,10 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         public int GetActualRound()
         {
             return actualRound;
+        }
+        public Match GetCurrentMatch()
+        {
+            return currentMatch;
         }
         
         /*

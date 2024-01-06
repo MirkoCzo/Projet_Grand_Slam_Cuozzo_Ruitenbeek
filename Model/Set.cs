@@ -42,7 +42,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
 
         
 
-        public void Play()
+        public async Task Play()
         {
             int gameNumber = 1;
             Schedule.ScheduleType type = GetTypeMatch(getMatch(this.id_match)); 
@@ -76,7 +76,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
                     else
                     {
                         //Tie break normal
-                        game.PlayTieBreak();
+                        await game.PlayTieBreak();
                         UpdateSets(game);
                         isTieBreakPlayed = true;
                     }
@@ -85,7 +85,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
                 else
                 {
                     //Jeu normal
-                    game.PlayGame();
+                    await game.PlayGame();
                     UpdateSets(game);
 
                 }

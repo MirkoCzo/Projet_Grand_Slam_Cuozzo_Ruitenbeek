@@ -51,7 +51,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
         {
         }
 
-        public void PlayGame()
+        public async Task PlayGame()
         {
             Random random = new Random();
 
@@ -85,7 +85,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
 
 
         }
-        public void PlayTieBreak()
+        public async Task PlayTieBreak()
         {
             Random random = new Random();
 
