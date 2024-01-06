@@ -243,9 +243,12 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek.Model
 
         public bool getIsTieBreak()
         {
+            return isTieBreakPlayed;
+        }
+        public bool getIsSuperTieBreak()
+        {
             return isSuperTieBreak;
         }
-
         public void setGames(List<Games> setGames)
         {
             this.games = setGames;

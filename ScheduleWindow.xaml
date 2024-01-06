@@ -37,9 +37,19 @@
                                 <Run Text="Sets : " FontWeight="Bold"/>
                                 <Run Text="{Binding ScoreWinner}" FontWeight="Bold" />
                                 <LineBreak/>
-
-                                <Run Text="Sets : " FontWeight="Normal"/>
+                                
+                                <Run Text="Sets : " FontWeight="Bold"/>
                                 <Run Text="{Binding ScoreLooser}" />
+                                <LineBreak/>        
+
+                                <Run Text="TieBreak? : " FontWeight="Normal"/>
+                                <Run Text="{Binding IsTieBreak}" />
+                                <LineBreak/>
+                                
+                                <Run Text="SuperTieBreak? : " FontWeight="Normal"/>
+                                <Run Text="{Binding IsSuperTieBreak}" />
+
+
                             </TextBlock>
                             <Separator Margin="0,10,0,10" Background="Gray" Height="2"/>
                         </StackPanel>
