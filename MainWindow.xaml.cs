@@ -36,11 +36,17 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             stopwatch.Start();
 
             List<Schedule> scheduleList = t.GetSchedules();
-            scheduleList[1].PlayNextRound();
-            scheduleList[2].PlayNextRound();
-            scheduleList[3].PlayNextRound();
-            scheduleList[4].PlayNextRound();
-            scheduleList[0].PlayNextRound();
+            for (int i = 0; i < 7; i++)
+            {
+                scheduleList[1].PlayNextRound();
+
+            }
+            Queue<Opponents> w = scheduleList[1].GetOpponentsList();
+            foreach (Opponents o in w)
+            {
+                MessageBox.Show(o.Player1.getLastname());
+            }
+
 
             stopwatch.Stop();
 
