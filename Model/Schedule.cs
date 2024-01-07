@@ -39,10 +39,9 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
 
 
         //Jouer un tour du schedule
-        public async Task PlayNextRound()
+        public async Task PlayNextRound(List<Match> matches)
         {
-            int matchesCount = opponentsList.Count / 2;
-            List<Match> matches = GenerateMatches(matchesCount);
+            
             List<Opponents> winners = new List<Opponents>();
             Court court;
             Referee referee;
@@ -108,21 +107,18 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
 
             if (this.matchPlayed % 30 == 0)
             {
-                currentDate = currentDate.AddDays(1);
-                currentDate = currentDate.Date.AddHours(10);
+                currentDate = currentDate.AddDays(1).Date.AddHours(10);
             }
             else if (this.matchPlayed % 15 == 0)
             {
                 currentDate = currentDate.AddHours(4);
             }
-            else
-            {
-                currentDate = currentDate.AddHours(0); // Aucun changement d'heure tout les 15 matchs
-            }
+            
 
             this.matchPlayed++;
             Tournament.date = currentDate;
             return currentDate;
+
         }
         //Save les matchs
         private Match CreateMatch(Opponents op1, Opponents op2, DateTime currentDate)

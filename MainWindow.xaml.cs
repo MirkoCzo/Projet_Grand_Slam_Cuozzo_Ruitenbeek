@@ -33,6 +33,11 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             InitializeComponent();
             this.t.GenerateSchedules();
             UpdateTourTextBlock();
+            b1.IsEnabled = false;
+            b2.IsEnabled = false;
+            b3.IsEnabled = false;
+            b4.IsEnabled = false;
+            b5.IsEnabled = false;
         }
 
         private void UpdateTourTextBlock()
@@ -42,18 +47,17 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+        {           
             Queue<Opponents> winner = new Queue<Opponents>();
             List<Schedule> scheduleList = this.t.GetSchedules();
-
             foreach (Schedule s in scheduleList)
             {
                 int NumberTourToPlay = s.GetNbRound1(s.GetType());
+                int matchesCount = s.GetOpponentsList().Count / 2;
+                List<Match> matches = s.GenerateMatches(matchesCount);
                 if (currentTourNumber <= NumberTourToPlay)
                 {
-                    await s.PlayNextRound();
+                    await s.PlayNextRound(matches);
                 }
                 winner = s.GetOpponentsList();
                 if (winner.Count == 1)
@@ -81,6 +85,11 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                     }
                 }
             }
+            b1.IsEnabled = true;
+            b2.IsEnabled = true;
+            b3.IsEnabled = true;
+            b4.IsEnabled  = true;
+            b5.IsEnabled = true;
 
             this.currentTourNumber++;
             if(currentTourNumber == 7)
@@ -88,10 +97,8 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                 boutonstart.IsEnabled = false;
             }
             UpdateTourTextBlock();
-            stopwatch.Stop();
-
-            // Afficher le temps écoulé
-            MessageBox.Show($"Temps écoulé : {stopwatch.Elapsed}");
+           
+            
         }
 
         private void AffSchedules(object sender, RoutedEventArgs e)
