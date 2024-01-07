@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,8 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
     {
         private int currentTourNumber = 0;
         Tournament t = new Tournament("TestTournoi", new DateTime(2024, 1, 1));
+
+        public List<int> ScoresSetsWinner { get; private set; }
 
         public MainWindow()
         {
@@ -55,20 +58,35 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                 winner = s.GetOpponentsList();
                 if (winner.Count == 1)
                 {
-                    Opponents op = winner.Dequeue();
-                    if (op.Player2 != null)
+                    Opponents win = s.GetOpponentsList().Peek();
+                    if (s.GetType() == Schedule.ScheduleType.GentlemenSingle)
                     {
-                        MessageBox.Show($"Le gagnant est {op.Player1.getLastname()} et {op.Player2.getLastname()}");
+                        gs.Text = $"Winner : {win.Player1.getFirstname()} {win.Player1.getLastname()}";
+                    }
+                    else if (s.GetType() == Schedule.ScheduleType.LadiesSingle)
+                    {
+                        ls.Text = $"Winner : {win.Player1.getFirstname()} {win.Player1.getLastname()}";
+                    }
+                    else if (s.GetType() == Schedule.ScheduleType.GentlemenDouble)
+                    {
+                        gd.Text = $"Winner : {win.Player1.getFirstname()} {win.Player1.getLastname()} - {win.Player2.getFirstname()} {win.Player2.getLastname()}";
+                    }
+                    else if (s.GetType() == Schedule.ScheduleType.LadiesDouble)
+                    {
+                        ld.Text = $"Winner : {win.Player1.getFirstname()} {win.Player1.getLastname()} - {win.Player2.getFirstname()} {win.Player2.getLastname()}";
                     }
                     else
                     {
-                        MessageBox.Show($"Le gagnant est {op.Player1.getLastname()}");
+                        md.Text = $"Winner : {win.Player1.getFirstname()} {win.Player1.getLastname()} - {win.Player2.getFirstname()} {win.Player2.getLastname()}";
                     }
-                    winner.Enqueue(op);
                 }
             }
 
             this.currentTourNumber++;
+            if(currentTourNumber == 7)
+            {
+                boutonstart.IsEnabled = false;
+            }
             UpdateTourTextBlock();
             stopwatch.Stop();
 
@@ -93,10 +111,14 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             List<Schedule> scheduleList = this.t.GetSchedules();
             Schedule type = scheduleList[enumValue];
             ScheduleWindow scheduleWindow = new ScheduleWindow();
+            List<int> ScoresOpp1 = new List<int>();
+            List<int> ScoresOpp2 = new List<int>();
+           
             for (int i = 0; i < type.GetNbRound1(type.GetType()); i++)
             {
                 List<MatchInfo> matchInfos = new List<MatchInfo>();
-
+                List<int> ScoreWinner = new List<int>();
+                List<int> ScoreLooser = new List<int>();
                 string TypeString = Schedule.GetScheduleString(type.GetType());
                 foreach (Match m in type.GetMatches())
                 {
@@ -111,6 +133,8 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                     List<Set> sets = m.getSets();
                     foreach (Set set in sets)
                     {
+                        ScoresOpp1.Add(set.getScoreOp1());
+                        ScoresOpp2.Add(set.getScoreOp2());
                         bool isTieBreak = set.getIsTieBreak();
                         bool isSuperTieBreak = set.getIsSuperTieBreak();
                         if (isTieBreak)
@@ -123,7 +147,21 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                             SuperTieBreak = "Oui";
                         }
                     }
-
+                    if (ScoresOpp1.Last() > ScoresOpp2.Last())
+                    {
+                        ScoreWinner = ScoresOpp1;
+                        ScoreLooser = ScoresOpp2;
+                        ScoresOpp1.Clear();
+                        ScoresOpp2.Clear();
+                    }
+                    else
+                    {
+                        ScoreLooser = ScoresOpp1;
+                        ScoreWinner = ScoresOpp2;
+                        ScoresOpp1.Clear();
+                        ScoresOpp2.Clear();
+                    }
+                    
                     if (type.GetType() == Schedule.ScheduleType.GentlemenSingle || type.GetType() == Schedule.ScheduleType.LadiesSingle)
                     {
                         Player p1 = m.getOpponents1().Player1;
@@ -140,7 +178,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                             loose = $" {p1.getLastname()} {p1.getFirstname()}";
                             win = $" {p2.getLastname()} {p2.getFirstname()}";
                         }
-                        MatchInfo matchInfo = new MatchInfo(date, GetRoundSingle(round), loose, win, scoreWin, scoreLoose, TieBreak, SuperTieBreak);
+                        MatchInfo matchInfo = new MatchInfo(date, GetRoundSingle(round), loose, win, scoreWin, scoreLoose, TieBreak, SuperTieBreak,ScoreWinner,ScoreLooser);
                         matchInfos.Add(matchInfo);
                     }
                     else
@@ -166,11 +204,12 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                             loose = $" {p1.getLastname()} {p1.getFirstname()} - {p2.getLastname()} {p2.getFirstname()}";
                             win = $"{p3.getLastname()} {p3.getFirstname()} - {p4.getLastname()} {p4.getFirstname()} ";
                         }
-                        MatchInfo matchInfo = new MatchInfo(date, GetRoundDouble(round), loose, win, scoreWin, scoreLoose, TieBreak, SuperTieBreak);
+                        MatchInfo matchInfo = new MatchInfo(date, GetRoundDouble(round), loose, win, scoreWin, scoreLoose, TieBreak, SuperTieBreak, ScoreWinner, ScoreLooser) ;
                         matchInfos.Add(matchInfo);
                     }
                 }
                 scheduleWindow.MatchItemControl.ItemsSource = matchInfos;
+               
                 scheduleWindow.TitleText = TypeString;
                 CurrentMatch++;
             }
@@ -197,7 +236,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                 case 6:
                     return "Finale";
                 default:
-                    return "Erreur";
+                    return "Terminé";
             }
         }
 
@@ -218,7 +257,7 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
                 case 5:
                     return "Finale";
                 default:
-                    return "Erreur";
+                    return "Terminé";
             }
         }
     }

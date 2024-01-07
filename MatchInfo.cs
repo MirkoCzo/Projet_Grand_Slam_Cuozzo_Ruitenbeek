@@ -23,7 +23,9 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         public string Type { get; set; }
         public string IsTieBreak { get; set; }
         public string IsSuperTieBreak { get; set; }
-        public MatchInfo(DateTime date, string round, string loosername, string winnerName, int scorewinner, int scorelooser, string isTieBreak, string isSuperTieBreak)
+        public List<int> ScoresSetsWinner { get; set; }
+        public List<int> ScoresSetsLooser { get; set; }
+        public MatchInfo(DateTime date, string round, string loosername, string winnerName, int scorewinner, int scorelooser, string isTieBreak, string isSuperTieBreak, List<int> scoresSetsWinner, List<int> scoresSetsLooser)
         {
             Date = date;
             Round = round;
@@ -33,6 +35,8 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
             ScoreLooser = scorelooser;
             IsTieBreak = isTieBreak;
             IsSuperTieBreak = isSuperTieBreak;
+            ScoresSetsWinner = scoresSetsWinner;
+            ScoresSetsLooser = scoresSetsLooser;
         }
     }
 }

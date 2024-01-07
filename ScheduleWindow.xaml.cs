@@ -32,11 +32,13 @@ namespace Projet_Grand_Slam_Cuozzo_Ruitenbeek
         {
             get { return matchesItemsControl; }
         }
+    
         public string TitleText
         {
             get { return scheduleTitleTextBlock.Text; }
             set { scheduleTitleTextBlock.Text = value; }
         }
+        
 
 
     }

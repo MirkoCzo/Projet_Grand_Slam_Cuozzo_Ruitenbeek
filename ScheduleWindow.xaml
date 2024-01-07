@@ -36,11 +36,32 @@
                                         
                                 <Run Text="Sets : " FontWeight="Bold"/>
                                 <Run Text="{Binding ScoreWinner}" FontWeight="Bold" />
+                                <ItemsControl ItemsSource="{Binding ScoresSetsWinner}" >
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding}" Margin="2"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            
+                                
                                 <LineBreak/>
                                 
                                 <Run Text="Sets : " FontWeight="Bold"/>
                                 <Run Text="{Binding ScoreLooser}" />
-                                <LineBreak/>        
+                                <ItemsControl ItemsSource="{Binding ScoresSetsWinner}" >
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation ="Horizontal">
+                                            <TextBlock Text="{Binding}" Margin="2"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <LineBreak/> 
+                                
 
                                 <Run Text="TieBreak? : " FontWeight="Normal"/>
                                 <Run Text="{Binding IsTieBreak}" />

@@ -6,24 +6,29 @@
         xmlns:local="clr-namespace:Projet_Grand_Slam_Cuozzo_Ruitenbeek"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid RenderTransformOrigin="0.5,0.5">
-        <Button Content="Start" HorizontalAlignment="Left" Margin="200,115,0,0" VerticalAlignment="Top" Click="Button_Click"/>
-        <TextBlock x:Name="title" HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap" Text="Grand Slam Tournament" VerticalAlignment="Top" FontWeight="Bold" FontSize="18"/>
-        <TextBlock  HorizontalAlignment="Left" Margin="362,115,0,0" TextWrapping="Wrap" Text="Single " VerticalAlignment="Top" FontWeight="Bold"/>
-        <TextBlock x:Name="tourSingle" HorizontalAlignment="Left" Margin="362,164,0,0" TextWrapping="Wrap" Text="Tour n° " VerticalAlignment="Top" FontWeight="Bold" RenderTransformOrigin="-2.995,-1.163"/>
-        <TextBlock  HorizontalAlignment="Left" Margin="634,118,0,0" TextWrapping="Wrap" Text="Double " VerticalAlignment="Top" FontWeight="Bold" RenderTransformOrigin="1.515,-6.073"/>
-        <TextBlock x:Name="tourDouble" HorizontalAlignment="Left" Margin="634,164,0,0" TextWrapping="Wrap" Text="Tour n° " VerticalAlignment="Top" FontWeight="Bold" RenderTransformOrigin="0.783,0.122"/>
-        <Label Content="Lancer le tour" HorizontalAlignment="Left" Margin="74,112,0,0" VerticalAlignment="Top"/>
-        <Label Content="Voir Gentlemen Single" HorizontalAlignment="Left" Margin="66,167,0,0" VerticalAlignment="Top"/>
-        <Label Content="Voir Ladies Single" HorizontalAlignment="Left" Margin="66,0,0,0" VerticalAlignment="Center"/>
-        <Label Content="Voir Gentlemen Double" HorizontalAlignment="Left" Margin="66,239,0,0" VerticalAlignment="Top"/>
-        <Label Content="Voir Ladies Double" HorizontalAlignment="Left" Margin="66,270,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.489,1.134"/>
-        <Label Content="Voir Mixed Double" HorizontalAlignment="Left" Margin="66,306,0,0" VerticalAlignment="Top"/>
-        <Button Content="Voir" HorizontalAlignment="Left" Margin="205,173,0,0" VerticalAlignment="Top" Click="AffSchedules" Tag="0"/>
-        <Button Content="Voir" HorizontalAlignment="Left" Margin="205,0,0,0" VerticalAlignment="Center" Click="AffSchedules" Tag="1"/>
-        <Button Content="Voir" HorizontalAlignment="Left" Margin="205,242,0,0" VerticalAlignment="Top" Click="AffSchedules" Tag="2"/>
-        <Button Content="Voir" HorizontalAlignment="Left" Margin="205,273,0,0" VerticalAlignment="Top" Click="AffSchedules" Tag="3" RenderTransformOrigin="0.574,1.171"/>
-        <Button Content="Voir" HorizontalAlignment="Left" Margin="205,309,0,0" VerticalAlignment="Top" Click="AffSchedules" Tag="4" RenderTransformOrigin="0.683,1.422"/>
+    <Grid RenderTransformOrigin="0.5,0.5" Background="SeaGreen">
+        <Button x:Name="boutonstart" Content="Start" HorizontalAlignment="Center" Margin="0,110,0,0" VerticalAlignment="Top" Click="Button_Click" Height="32" Width="96" FontFamily="Verdana" Background="OrangeRed" BorderThickness="2" Foreground="White"/>
+        <TextBlock x:Name="title" HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap" Text="Grand Slam Tournament" VerticalAlignment="Top" FontWeight="Bold" FontSize="18" FontFamily="Verdana" Foreground="White" />
+        <TextBlock  HorizontalAlignment="Left" Margin="545,99,0,0" TextWrapping="Wrap" Text="Single : " VerticalAlignment="Top" FontWeight="Bold" FontFamily="Verdana" Foreground="White"/>
+        <TextBlock x:Name="tourSingle" HorizontalAlignment="Left" Margin="645,99,0,0" TextWrapping="Wrap" Text="Tour n° " VerticalAlignment="Top" FontWeight="Bold" RenderTransformOrigin="-2.995,-1.163" FontFamily="Verdana" Foreground="White"/>
+        <TextBlock  HorizontalAlignment="Left" Margin="545,135,0,0" TextWrapping="Wrap" Text="Double : " VerticalAlignment="Top" FontWeight="Bold" RenderTransformOrigin="1.515,-6.073" FontFamily="Verdana" Foreground="White"/>
+        <TextBlock x:Name="tourDouble" HorizontalAlignment="Left" Margin="645,135,0,0" TextWrapping="Wrap" Text="Tour n° " VerticalAlignment="Top" FontWeight="Bold" RenderTransformOrigin="0.783,0.122" FontFamily="Verdana" Foreground="White"/>
+        <Label Content="Lancer un tour :" HorizontalAlignment="Left" Margin="168,110,0,0" VerticalAlignment="Top" Height="30" Width="151" FontFamily="Verdana" FontSize="15" Foreground="White" FontWeight="Bold"/>
+        <Label Content="Voir Gentlemen Single" HorizontalAlignment="Left" Margin="66,224,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Verdana"/>
+        <Label Content="Voir Ladies Single" HorizontalAlignment="Left" Margin="67,251,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Verdana"/>
+        <Label Content="Voir Gentlemen Double" HorizontalAlignment="Left" Margin="65,276,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Verdana"/>
+        <Label Content="Voir Ladies Double" HorizontalAlignment="Left" Margin="67,301,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.489,1.134" Foreground="White" FontFamily="Verdana"/>
+        <Label Content="Voir Mixed Double" HorizontalAlignment="Left" Margin="67,326,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Verdana"/>
+        <Button Content="Voir" HorizontalAlignment="Left" Margin="277,226,0,0" VerticalAlignment="Top" Click="AffSchedules" Tag="0" Background="OrangeRed" BorderThickness="2" Foreground="White" FontFamily="Verdana" Width="42" RenderTransformOrigin="0.456,2.082"/>
+        <Button Content="Voir" HorizontalAlignment="Left" Margin="277,253,0,0" VerticalAlignment="Top" Click="AffSchedules" Tag="1" Background="OrangeRed" BorderThickness="2" Foreground="White" FontFamily="Verdana" Width="42"/>
+        <Button Content="Voir" HorizontalAlignment="Left" Margin="277,278,0,0" VerticalAlignment="Top" Click="AffSchedules" Tag="2" Background="OrangeRed" BorderThickness="2" Foreground="White" FontFamily="Verdana" Width="42"/>
+        <Button Content="Voir" HorizontalAlignment="Left" Margin="277,303,0,0" VerticalAlignment="Top" Click="AffSchedules" Tag="3" RenderTransformOrigin="0.574,1.171" Background="OrangeRed" BorderThickness="2" Foreground="White" FontFamily="Verdana" Width="42"/>
+        <Button Content="Voir" HorizontalAlignment="Left" Margin="277,330,0,0" VerticalAlignment="Top" Click="AffSchedules" Tag="4" RenderTransformOrigin="0.683,1.422" Background="OrangeRed" BorderThickness="2" Foreground="White" FontFamily="Verdana" Width="42"/>
+        <TextBlock x:Name="gs" HorizontalAlignment="Left" Margin="362,228,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Foreground="White" FontFamily="Verdana"/>
+        <TextBlock x:Name="ls" HorizontalAlignment="Left" Margin="362,255,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Foreground="White" FontFamily="Verdana"/>
+        <TextBlock x:Name="gd" HorizontalAlignment="Left" Margin="362,280,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Foreground="White" FontFamily="Verdana"/>
+        <TextBlock x:Name="ld" HorizontalAlignment="Left" Margin="362,305,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Foreground="White" FontFamily="Verdana"/>
+        <TextBlock x:Name="md" HorizontalAlignment="Left" Margin="362,330,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Foreground="White" FontFamily="Verdana"/>
 
     </Grid>
 
